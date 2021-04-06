@@ -79,12 +79,15 @@ int main(int argc, char **argv)
         }
 
         //PATH를 파싱
+
         strcpy(copy_path, getenv("PATH"));
         cut_path = strtok(copy_path, ":");
         strcpy(new_path, cut_path);
         strcat(new_path, "/");
         strcat(new_path, command); //파싱한 PATH뒤에 명령어를 붙임
         strcat(new_path, "");
+        printf("%s", command);
+
         //자식 프로세스 생성
         pid = fork();
 
@@ -103,20 +106,30 @@ int main(int argc, char **argv)
             return -1;
         }
 
+        printf("%s", command);
         if (pid == 0)
         { //자식프로세스
             //PATH가 맞을 때 까지 무한 루프, 모든 PATH 실패할 경우 탈출
-            while (execv(new_path, new_argv) == -1)
-            {
-                //PATH를 파싱
-                if (!(cut_path = strtok(NULL, ":")))
-                    break;
-                //파싱 후 PATH 뒤에 경로를 붙임
-                strcpy(new_path, cut_path);
-                strcat(new_path, "/");
-                strcat(new_path, command);
-                strcat(new_path, "");
-            }
+            //execvp(command, new_argv); //추가한 사항1
+            printf("%s", command);
+            printf("dasdasdasdasdasdassd");
+            char temp_path[500] = "/bin";
+            strcat(temp_path, "/");
+            strcat(temp_path, command); //파싱한 PATH뒤에 명령어를 붙임
+            strcat(temp_path, "");
+
+            execv(temp_path, new_argv);
+            // while (execv(new_path, new_argv) == -1)
+            // {
+            //     //PATH를 파항
+            //     if (!(cut_path = strtok(NULL, ":")))
+            //         break;
+            //     //파싱 후 PATH 뒤에 경로를 붙임
+            //     strcpy(new_path, cut_path);
+            //     strcat(new_path, "/");
+            //     strcat(new_path, command);
+            //     strcat(new_path, "");
+            // }
             //자식프로세스가 명령을 수행하면 종료됨
             exit(0);
         }
