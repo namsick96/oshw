@@ -52,7 +52,7 @@ void partition(int left, int right)
     }
 }
 
-int main()
+int main(int argc, char *argv[])
 {
     struct timespec begin, end;
     double tmpValue = 0.0;

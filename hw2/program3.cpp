@@ -11,47 +11,6 @@ int *arr1;
 int *arr2;
 int process_num;
 
-vector<pair<int, int> > index_pair(int &N, int &total_process_num)
-{
-    int divide_num = 1;
-    while (1)
-    {
-        if (divide_num >= total_process_num)
-        {
-            break;
-        }
-        else
-        {
-            divide_num = divide_num * 2;
-        }
-    }
-
-    int parsed_num;
-    if (N % divide_num == 0)
-    {
-        parsed_num = N / divide_num;
-    }
-    else
-    {
-        parsed_num = (int)(N / divide_num) + 1;
-    }
-    //pair indicate start to end -1 idx is one set
-    vector<pair<int, int> > vec_pair;
-    int start = 0;
-    int end = start + parsed_num;
-    int count = 0;
-    while (end < N && count < total_process_num - 1)
-    {
-        vec_pair.push_back(make_pair(start, end));
-        start = end;
-        end = end + parsed_num;
-        count++;
-    }
-    vec_pair.push_back(make_pair(start, N));
-
-    return vec_pair;
-}
-
 int main(int argc, char *argv[])
 {
     struct timespec begin, end;
