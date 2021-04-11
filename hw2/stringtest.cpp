@@ -17,6 +17,11 @@
 
 using namespace std;
 
+/* 
+made by namsick96
+Dev Date 210406
+*/
+
 int change_dir(char *args[])
 {
     if (args[1] == NULL)
@@ -89,7 +94,7 @@ int launch(char *args[], int bg, int input_status, int output_status, string inp
             out = open(output_file.c_str(), O_WRONLY | O_TRUNC | O_CREAT, S_IRUSR | S_IRGRP | S_IWGRP | S_IWUSR);
             dup2(out, 1);
         }
-        if (execve(args[0], args, envp) == -1)
+        if (execvp(args[0], args) == -1)
         {
             perror("child process error");
         }

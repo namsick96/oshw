@@ -13,223 +13,109 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <fcntl.h>
 
-using namespace std;
-/*
-  Function Declarations for builtin shell commands:
- */
-int lsh_cd(char **args);
-int lsh_help(char **args);
-int lsh_exit(char **args);
-
-/*
-  List of builtin commands, followed by their corresponding functions.
- */
-char *builtin_str[] = {
-    "cd",
-    "help",
-    "exit"};
-
-int (*builtin_func[])(char **) = {
-    &lsh_cd,
-    &lsh_help,
-    &lsh_exit};
-
-int lsh_num_builtins()
-{
-    return sizeof(builtin_str) / sizeof(char *);
-}
-
-/*
-  Builtin function implementations.
+/* 
+made by namsick96
+Dev Date 210408
 */
 
-/**
-   @brief Bultin command: change directory.
-   @param args List of args.  args[0] is "cd".  args[1] is the directory.
-   @return Always returns 1, to continue executing.
- */
-int lsh_cd(char **args)
+using namespace std;
+
+int change_dir(char *args[])
 {
     if (args[1] == NULL)
     {
-        fprintf(stderr, "lsh: expected argument to \"cd\"\n");
+        fprintf(stderr, " No argument for \"cd\"\n");
     }
     else
     {
         if (chdir(args[1]) != 0)
         {
-            perror("lsh");
+            perror("changing error");
         }
     }
     return 1;
 }
 
-/**
-   @brief Builtin command: print help.
-   @param args List of args.  Not examined.
-   @return Always returns 1, to continue executing.
- */
-int lsh_help(char **args)
-{
-    int i;
-    printf("Stephen Brennan's LSH\n");
-    printf("Type program names and arguments, and hit enter.\n");
-    printf("The following are built in:\n");
-
-    for (i = 0; i < lsh_num_builtins(); i++)
-    {
-        printf("  %s\n", builtin_str[i]);
-    }
-
-    printf("Use the man command for information on other programs.\n");
-    return 1;
-}
-
-/**
-   @brief Builtin command: exit.
-   @param args List of args.  Not examined.
-   @return Always returns 0, to terminate execution.
- */
-int lsh_exit(char **args)
-{
-    return 0;
-}
-
-/**
-  @brief Launch a program and wait for it to terminate.
-  @param args Null terminated list of arguments (including program).
-  @return Always returns 1, to continue execution.
- */
-int lsh_launch(char **args)
+int launch(char *args[], int bg, int input_status, int output_status, string input_file, string output_file)
 {
     pid_t pid;
     int status;
-    char *envp[] = {(char *)"PATH=/bin", 0};
 
     pid = fork();
     if (pid == 0)
     {
-        // Child process
-        if (execve(args[0], args, envp) == -1)
+        char *envp[] = {(char *)"PATH=/bin", 0};
+        int in, out;
+
+        if (input_status)
+        {
+            in = open(input_file.c_str(), O_RDONLY);
+            dup2(in, 0);
+        }
+        if (output_status)
+        {
+            out = open(output_file.c_str(), O_WRONLY | O_TRUNC | O_CREAT, S_IRUSR | S_IRGRP | S_IWGRP | S_IWUSR);
+            dup2(out, 1);
+        }
+        if (execvp(args[0], args) == -1)
         {
             perror("child process error");
+        }
+        if (input_status)
+        {
+            close(in);
+        }
+        if (output_status)
+        {
+            close(out);
         }
         exit(EXIT_FAILURE);
     }
     else if (pid < 0)
     {
-        // Error forking
         perror("child processor did not made");
     }
     else
     {
-        // Parent process
-        do
+        //parent process
+        if (bg)
         {
-            waitpid(pid, &status, WUNTRACED);
-        } while (!WIFEXITED(status) && !WIFSIGNALED(status));
+            //not wait implement
+            return 1;
+        }
+        else
+        {
+            do
+            {
+                waitpid(pid, &status, WUNTRACED);
+            } while (!WIFEXITED(status) && !WIFSIGNALED(status));
+        }
     }
-
     return 1;
 }
 
-/**
-   @brief Execute shell built-in or launch program.
-   @param args Null terminated list of arguments.
-   @return 1 if the shell should continue running, 0 if it should terminate
- */
-int lsh_execute(char **args)
+int execute(char *args[], int bg, int input_status, int output_status, string input_file, string output_file)
 {
-    int i;
-
     if (args[0] == NULL)
     {
         // An empty command was entered.
         return 1;
     }
-
-    for (i = 0; i < lsh_num_builtins(); i++)
+    if (strcmp(args[0], "exit") == 0)
     {
-        if (strcmp(args[0], builtin_str[i]) == 0)
-        {
-            return (*builtin_func[i])(args);
-        }
+        return 0;
     }
+    if (strcmp(args[0], "cd") == 0)
+    {
 
-    return lsh_launch(args);
+        return change_dir(args);
+    }
+    return launch(args, bg, input_status, output_status, input_file, output_file);
 }
 
-/**
-   @brief Read a line of input from stdin.
-   @return The line from stdin.
- */
-char *lsh_read_line(void) // 걍 스트링으로 하자..
-{
-    char *line = NULL;
-    int bufsize = 1024; // have getline allocate a buffer for us
-    if (cin.getline(line) == -1)
-    {
-        if (feof(stdin))
-        {
-            exit(EXIT_SUCCESS); // We received an EOF
-        }
-        else
-        {
-            perror("problem occur in reading line\n");
-            exit(EXIT_FAILURE);
-        }
-    }
-    return line;
-}
-
-#define LSH_TOK_BUFSIZE 64
-#define LSH_TOK_DELIM " \t\r\n\a"
-/**
-   @brief Split a line into tokens (very naively).
-   @param line The line.
-   @return Null-terminated array of tokens.
- */
-char **lsh_split_line(char *line)
-{
-    int bufsize = LSH_TOK_BUFSIZE, position = 0;
-    char **tokens = malloc(bufsize * sizeof(char *));
-    char *token, **tokens_backup;
-
-    if (!tokens)
-    {
-        fprintf(stderr, "lsh: allocation error\n");
-        exit(EXIT_FAILURE);
-    }
-
-    token = strtok(line, LSH_TOK_DELIM);
-    while (token != NULL)
-    {
-        tokens[position] = token;
-        position++;
-
-        if (position >= bufsize)
-        {
-            bufsize += LSH_TOK_BUFSIZE;
-            tokens_backup = tokens;
-            tokens = realloc(tokens, bufsize * sizeof(char *));
-            if (!tokens)
-            {
-                free(tokens_backup);
-                fprintf(stderr, "lsh: allocation error\n");
-                exit(EXIT_FAILURE);
-            }
-        }
-
-        token = strtok(NULL, LSH_TOK_DELIM);
-    }
-    tokens[position] = NULL;
-    return tokens;
-}
-
-int execute(char **args)
-
-    void display_prompt()
+void display_prompt()
 {
     //time output
     time_t curTime = time(NULL);
@@ -245,19 +131,9 @@ int execute(char **args)
     cout << nowdir << "$";
 }
 
-/**
-   @brief Main entry point.
-   @param argc Argument count.
-   @param argv Argument vector.
-   @return status code
- */
 int main(int argc, char **argv)
 {
-    // Load config files, if any.
-
     // Run command loop.
-    char *line; //변경 예정
-    char **args;
     int status;
 
     do
@@ -276,14 +152,17 @@ int main(int argc, char **argv)
         //get line from user
         string line;
         string last;
-        getline(cin, line);
 
-        //check last word &
-        last = line.substr(line.length() - 1, line.length());
-        if (last == "&")
+        getline(cin, line);
+        // check last word if size is bigger than 1
+        if (line.size() > 0)
         {
-            line = line.substr(0, line.length() - 1);
-            bg_status = 1;
+            last = line.substr(line.length() - 1, line.length());
+            if (last == "&")
+            {
+                line = line.substr(0, line.length() - 1);
+                bg_status = 1;
+            }
         }
 
         /*
@@ -392,15 +271,9 @@ int main(int argc, char **argv)
         }
         args[tokens.size()] = 0;
 
-        //수정중..
-        line = lsh_read_line();
+        //execute!
+        status = execute(args, bg_status, input_status, output_status, inputfile, outputfile);
 
-        //이 부분은 main에서 돌린다. 그리고 마지막 명령어가 &이면 execute을 다른걸 준다.
-        args = lsh_split_line(line);
-        status = lsh_execute(args);
-
-        delete (line);
-        delete (args);
     } while (status);
 
     // Perform any shutdown/cleanup.
