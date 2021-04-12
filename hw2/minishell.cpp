@@ -213,8 +213,8 @@ int main(int argc, char **argv)
                 outFileNameEndIdx = line.find(" ", outFileNameEndIdx + 1);
             }
 
-            outputfile = line.substr(outputIdx + 1, outFileNameEndIdx - outputIdx - 1);            //file part
-            outputfile.erase(remove(outputfile.begin(), outputfile.end(), ' '), outputfile.end()); //file part blank erase
+            outputfile = line.substr(outputIdx + 1, outFileNameEndIdx - outputIdx - 1);                 //file part
+            outputfile.erase(std::remove(outputfile.begin(), outputfile.end(), ' '), outputfile.end()); //file part blank erase
 
             line.erase(outputIdx, outFileNameEndIdx - outputIdx + 1); //file part eliminate from line
         }
@@ -230,8 +230,8 @@ int main(int argc, char **argv)
                 outFileNameEndIdx = line.find(" ", outFileNameEndIdx + 1);
             }
 
-            outputfile = line.substr(outputIdx + 1, outFileNameEndIdx - outputIdx - 1);            //file part
-            outputfile.erase(remove(outputfile.begin(), outputfile.end(), ' '), outputfile.end()); //file part blank erase
+            outputfile = line.substr(outputIdx + 1, outFileNameEndIdx - outputIdx - 1);                 //file part
+            outputfile.erase(std::remove(outputfile.begin(), outputfile.end(), ' '), outputfile.end()); //file part blank erase
 
             line.erase(outputIdx, outFileNameEndIdx - outputIdx + 1); //file part eliminate from line
 
@@ -245,8 +245,8 @@ int main(int argc, char **argv)
                 inFileNameEndIdx = line.find(" ", inFileNameEndIdx + 1);
             }
 
-            inputfile = line.substr(inputIdx + 1, inFileNameEndIdx - inputIdx - 1);            //file part
-            inputfile.erase(remove(inputfile.begin(), inputfile.end(), ' '), inputfile.end()); //file part blank erase
+            inputfile = line.substr(inputIdx + 1, inFileNameEndIdx - inputIdx - 1);                 //file part
+            inputfile.erase(std::remove(inputfile.begin(), inputfile.end(), ' '), inputfile.end()); //file part blank erase
 
             line.erase(inputIdx, inFileNameEndIdx - inputIdx + 1); //file part eliminate from line
         }
