@@ -1,6 +1,7 @@
 #include <iostream>
 #include <time.h>
 #include <sys/time.h>
+#include <sys/wait.h>
 #include <unistd.h>
 #include <vector>
 
@@ -85,9 +86,8 @@ int main(int argc, char *argv[])
         pid = fork();
         if (pid == 0)
         {
-            dup2(fd[0], 0);
+            dup2(fd[0], STDIN_FILENO);
             close(fd[1]);
-            //close(fd[1]);
             char *argv[] = {0};
             execvp("./program1", argv);
         }
@@ -97,10 +97,10 @@ int main(int argc, char *argv[])
         }
         else
         {
-            int tempdup = dup(1);
+            int tempdup = dup(STDOUT_FILENO);
             if (fd[1] != 1)
             {
-                dup2(fd[1], 1);
+                dup2(fd[1], STDOUT_FILENO);
             }
             close(fd[0]);
             int first = idx_pair[i].first;
@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
             {
                 cout << arr1[k] << endl;
             }
-            dup2(tempdup, 1); //rechange, roll back std table
+            dup2(tempdup, STDOUT_FILENO); //rechange, roll back std table
             waitpid(pid, &status, WUNTRACED);
         }
     }
