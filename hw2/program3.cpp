@@ -24,7 +24,7 @@ struct ThreadArgs
 
 void merge(int left, int right)
 {
-    syn.lock(); //mutex lock
+
     int mid = (left + right) / 2;
     int i = left;
     int j = mid + 1;
@@ -51,8 +51,6 @@ void merge(int left, int right)
 
     for (int i = left; i <= right; i++)
         arr1[i] = arr2[i];
-
-    syn.unlock();
 }
 void partition(int left, int right)
 {
@@ -68,13 +66,14 @@ void partition(int left, int right)
 
 void *partitionOne(void *data)
 {
+
     ThreadArgs *threadArgs = (ThreadArgs *)data;
     int left = threadArgs->left;
     int right = threadArgs->right;
 
     struct timespec begin, end;
     clock_gettime(CLOCK_MONOTONIC, &begin);
-
+    syn.lock(); //mutex lock
     int mid;
     if (left < right)
     {
@@ -83,6 +82,7 @@ void *partitionOne(void *data)
         partition(mid + 1, right);
         merge(left, right);
     }
+    syn.lock(); //mutex lock
     clock_gettime(CLOCK_MONOTONIC, &end);
 
     syn.lock();
