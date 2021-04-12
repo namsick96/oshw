@@ -24,12 +24,11 @@ struct ThreadArgs
 
 void merge(int left, int right)
 {
-
+    syn.lock(); //mutex lock
     int mid = (left + right) / 2;
     int i = left;
     int j = mid + 1;
     int k = left;
-    syn.lock(); //mutex lock
     while (i <= mid && j <= right)
     {
         if (arr1[i] > arr1[j])
