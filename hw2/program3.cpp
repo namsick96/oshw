@@ -47,10 +47,14 @@ void merge(int left, int right)
         tmp = i;
     }
     while (k <= right)
+    {
         arr2[k++] = arr1[tmp++];
+    }
 
     for (int i = left; i <= right; i++)
+    {
         arr1[i] = arr2[i];
+    }
 }
 void partition(int left, int right)
 {
@@ -70,10 +74,11 @@ void *partitionOne(void *data)
     ThreadArgs *threadArgs = (ThreadArgs *)data;
     int left = threadArgs->left;
     int right = threadArgs->right;
-
+    syn.lock();
+    cout << left << " " << right << endl;
+    //syn.unlock();
     struct timespec begin, end;
     clock_gettime(CLOCK_MONOTONIC, &begin);
-    syn.lock(); //mutex lock
     int mid;
     if (left < right)
     {
@@ -82,10 +87,9 @@ void *partitionOne(void *data)
         partition(mid + 1, right);
         merge(left, right);
     }
-    syn.lock(); //mutex lock
     clock_gettime(CLOCK_MONOTONIC, &end);
 
-    syn.lock();
+    //syn.lock();
     for (int i = left; i < right; i++)
     {
         cout << arr2[i] << " ";
@@ -186,10 +190,10 @@ int main(int argc, char *argv[])
     }
     //test whole
     //maybe sorted in group
-    // for (int i = 0; i < N; i++)
-    // {
-    //     cout << arr2[i] << " ";
-    // }
+    for (int i = 0; i < N; i++)
+    {
+        cout << arr2[i] << " ";
+    }
 
     return 0;
 }
