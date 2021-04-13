@@ -22,19 +22,19 @@ struct ThreadArgs
     int th_num;
 };
 
-void merge(int data[], int left, int right)
+void merge(int left, int right)
 {
-    int temp[right - left];
+
     int mid = (left + right) / 2;
     int i = left;
     int j = mid + 1;
     int k = left;
     while (i <= mid && j <= right)
     {
-        if (data[i] > data[j])
-            temp[k++] = data[i++];
+        if (arr1[i] > arr1[j])
+            arr2[k++] = arr1[i++];
         else
-            temp[k++] = data[j++];
+            arr2[k++] = arr1[j++];
     }
 
     int tmp;
@@ -48,24 +48,23 @@ void merge(int data[], int left, int right)
     }
     while (k <= right)
     {
-        temp[k++] = data[tmp++];
+        arr2[k++] = arr1[tmp++];
     }
 
     for (int i = left; i <= right; i++)
     {
-        data[i] = temp[i];
+        arr1[i] = arr2[i];
     }
 }
-
-void partition(int data[], int left, int right)
+void partition(int left, int right)
 {
     int mid;
     if (left < right)
     {
         mid = (left + right) / 2;
-        partition(data, left, mid);
-        partition(data, mid + 1, right);
-        merge(data, left, right);
+        partition(left, mid);
+        partition(mid + 1, right);
+        merge(left, right);
     }
 }
 
@@ -77,28 +76,28 @@ void *partitionOne(void *data)
     int right = threadArgs->right;
 
     syn.lock();
-    int arr_data[right - left];
-    for (int i = left; i < right; i++)
-    {
-        arr_data[i - left] = arr1[i];
-    }
-
-    syn.unlock();
-
+    cout << left << " " << right << endl;
+    //syn.unlock();
     struct timespec begin, end;
     clock_gettime(CLOCK_MONOTONIC, &begin);
-
-    partition(arr_data, 0, right - left - 1);
-    clock_gettime(CLOCK_MONOTONIC, &end);
-    syn.lock();
-    for (int i = 0; i < right - left; i++)
+    int mid;
+    if (left < right)
     {
-        cout << arr_data[i] << " ";
+        mid = (left + right) / 2;
+        partition(left, mid);
+        partition(mid + 1, right);
+        merge(left, right);
+    }
+    clock_gettime(CLOCK_MONOTONIC, &end);
+
+    //syn.lock();
+    for (int i = left; i < right; i++)
+    {
+        cout << arr2[i] << " ";
     }
     cout << endl;
     cout << ((end.tv_sec - begin.tv_sec) * 1000.0) + ((end.tv_nsec - begin.tv_nsec) / 1000000.0) << endl;
     syn.unlock();
-
     pthread_exit(NULL);
 }
 
@@ -161,14 +160,11 @@ int main(int argc, char *argv[])
     {
         cin >> arr1[i];
     }
-    /*
-    //test
+
     for (int i = 0; i < N; i++)
     {
         cout << arr1[i] << " ";
     }
-    cout << endl;
-    */
 
     pthread_t pthread[total_thread_num];
     long thread_times_ms[total_thread_num];
@@ -181,7 +177,6 @@ int main(int argc, char *argv[])
         threadArgs = new ThreadArgs();
         threadArgs->left = idx_pair[i].first;
         threadArgs->right = idx_pair[i].second;
-        threadArgs->th_num = i;
 
         int thread_id = pthread_create(&pthread[i], NULL, partitionOne, (void *)threadArgs);
 
@@ -198,5 +193,12 @@ int main(int argc, char *argv[])
         int status;
         pthread_join(pthread[i], (void **)&status);
     }
+    //test whole
+    //maybe sorted in group
+    for (int i = 0; i < N; i++)
+    {
+        cout << arr2[i] << " ";
+    }
+
     return 0;
 }
