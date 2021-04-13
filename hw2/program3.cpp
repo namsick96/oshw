@@ -24,7 +24,7 @@ struct ThreadArgs
 
 void merge(int data[], int left, int right)
 {
-    int temp[right - left];
+    int temp[right + 1];
     int mid = (left + right) / 2;
     int i = left;
     int j = mid + 1;
@@ -36,7 +36,6 @@ void merge(int data[], int left, int right)
         else
             temp[k++] = data[j++];
     }
-
     int tmp;
     if (i > mid)
     {
@@ -65,25 +64,35 @@ void partition(int data[], int left, int right)
         mid = (left + right) / 2;
         partition(data, left, mid);
         partition(data, mid + 1, right);
+
         merge(data, left, right);
     }
 }
 
 void *partitionOne(void *data)
 {
-
+    //syn.lock();
     ThreadArgs *threadArgs = (ThreadArgs *)data;
     int left = threadArgs->left;
     int right = threadArgs->right;
 
-    syn.lock();
+    //syn.lock();
     int arr_data[right - left];
-    for (int i = left; i < right; i++)
+    //test
+    //int *arr_data = new int[right - left];
+    //cout << left << " " << right << endl;
+    for (int p = left; p < right; p++)
     {
-        arr_data[i - left] = arr1[i];
+        arr_data[p - left] = arr1[p];
     }
-
-    syn.unlock();
+    /*
+    //test
+    for (int t = left; t < right; t++)
+    {
+        cout << arr_data[t - left] << " ";
+    }
+    */
+    //syn.unlock();
 
     struct timespec begin, end;
     clock_gettime(CLOCK_MONOTONIC, &begin);
@@ -91,6 +100,7 @@ void *partitionOne(void *data)
     partition(arr_data, 0, right - left - 1);
     clock_gettime(CLOCK_MONOTONIC, &end);
     syn.lock();
+
     for (int i = 0; i < right - left; i++)
     {
         cout << arr_data[i] << " ";
@@ -161,8 +171,9 @@ int main(int argc, char *argv[])
     {
         cin >> arr1[i];
     }
-    /*
+
     //test
+    /*
     for (int i = 0; i < N; i++)
     {
         cout << arr1[i] << " ";
@@ -182,6 +193,8 @@ int main(int argc, char *argv[])
         threadArgs->left = idx_pair[i].first;
         threadArgs->right = idx_pair[i].second;
         threadArgs->th_num = i;
+        //test
+        //cout << i << endl;
 
         int thread_id = pthread_create(&pthread[i], NULL, partitionOne, (void *)threadArgs);
 
