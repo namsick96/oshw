@@ -212,6 +212,8 @@ int main(int argc, char *argv[])
         waitpid(pid, &status, WUNTRACED);
     }
     */
+
+    //final sort
     partition(arr2, 0, N - 1);
     clock_gettime(CLOCK_MONOTONIC, &end);
     for (int k = 0; k < N; k++)

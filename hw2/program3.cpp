@@ -213,6 +213,7 @@ int main(int argc, char *argv[])
         int status;
         pthread_join(pthread[i], (void **)&status);
     }
+    //final sort
     partition(arr2, 0, N);
 
     clock_gettime(CLOCK_MONOTONIC, &end);

@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
         cout << arr1[i] << " ";
     }
     const char *str1 = "program2";
-    if (!(strcmp(str1, argv[0])))
+    if ((strcmp(str1, argv[0]) == 0))
     {
     }
     else
