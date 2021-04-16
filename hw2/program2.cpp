@@ -53,6 +53,53 @@ vector<pair<int, int> > index_pair(int &N, int &total_process_num)
     return vec_pair;
 }
 
+void merge(int data[], int left, int right)
+{
+    int temp[right + 1];
+    int mid = (left + right) / 2;
+    int i = left;
+    int j = mid + 1;
+    int k = left;
+    while (i <= mid && j <= right)
+    {
+        if (data[i] > data[j])
+            temp[k++] = data[i++];
+        else
+            temp[k++] = data[j++];
+    }
+    int tmp;
+    if (i > mid)
+    {
+        tmp = j;
+    }
+    else
+    {
+        tmp = i;
+    }
+    while (k <= right)
+    {
+        temp[k++] = data[tmp++];
+    }
+
+    for (int i = left; i <= right; i++)
+    {
+        data[i] = temp[i];
+    }
+}
+
+void partition(int data[], int left, int right)
+{
+    int mid;
+    if (left < right)
+    {
+        mid = (left + right) / 2;
+        partition(data, left, mid);
+        partition(data, mid + 1, right);
+
+        merge(data, left, right);
+    }
+}
+
 int main(int argc, char *argv[])
 {
     struct timespec begin, end;
@@ -74,7 +121,9 @@ int main(int argc, char *argv[])
     pid_t pid;
     int status;
     int fd[2];
+    int fd2[2];
 
+    clock_gettime(CLOCK_MONOTONIC, &begin);
     for (int i = 0; i < total_process_num; i++)
     {
         if (pipe(fd) == -1)
@@ -82,13 +131,30 @@ int main(int argc, char *argv[])
             perror("pipe");
             exit(1);
         }
+        if (pipe(fd2) == -1)
+        {
+            perror("pipe");
+            exit(1);
+        }
+        pipe(fd2);
 
         pid = fork();
         if (pid == 0)
         {
-            dup2(fd[0], STDIN_FILENO);
+            //child
             close(fd[1]);
-            char *argv[] = {0};
+            close(fd2[0]);
+            dup2(fd[0], STDIN_FILENO);
+            dup2(fd2[1], STDOUT_FILENO);
+
+            string temp2 = "program2";
+            char *temp = new char[temp2.size() + 1];
+            copy(temp2.begin(), temp2.end(), temp);
+            temp[temp2.size()] = '\0';
+            //strcpy(temp, temp2.c_str());
+            char *argv[] = {temp, 0};
+
+            //char *argv[] = {0};
             execvp("./program1", argv);
         }
         else if (pid < 0)
@@ -97,12 +163,18 @@ int main(int argc, char *argv[])
         }
         else
         {
+            close(fd[0]);
+            close(fd2[1]);
             int tempdup = dup(STDOUT_FILENO);
             if (fd[1] != 1)
             {
                 dup2(fd[1], STDOUT_FILENO);
             }
-            close(fd[0]);
+            int tempdup2 = dup(STDIN_FILENO);
+            if (fd2[0] != 0)
+            {
+                dup2(fd2[0], STDIN_FILENO);
+            }
             int first = idx_pair[i].first;
             int second = idx_pair[i].second;
             int nums = second - first;
@@ -112,10 +184,42 @@ int main(int argc, char *argv[])
             {
                 cout << arr1[k] << endl;
             }
+            for (int k = first; k < second; k++)
+            {
+                cin >> arr2[k];
+            }
+            dup2(tempdup2, STDIN_FILENO);
             dup2(tempdup, STDOUT_FILENO); //rechange, roll back std table
             waitpid(pid, &status, WUNTRACED);
+            /*
+            this is waitpid in version. this does not get child process output
+            waitpid(pid, &status, WUNTRACED);
+            for (int k = first; k < second + 1; k++)
+            {
+                //int temp;
+                cin >> arr2[k];
+                //cin >> temp;
+                //cout << temp << " ";
+            }
+            dup2(tempdup2, STDIN_FILENO);
+            dup2(tempdup, STDOUT_FILENO);
+            */
         }
     }
+    /*
+    for (int i = 0; i < total_process_num; i++)
+    {
+        waitpid(pid, &status, WUNTRACED);
+    }
+    */
+    partition(arr2, 0, N - 1);
+    clock_gettime(CLOCK_MONOTONIC, &end);
+    for (int k = 0; k < N; k++)
+    {
+        cout << arr2[k] << " ";
+    }
+    cout << "\n";
+    cout << ((end.tv_sec - begin.tv_sec) * 1000.0) + ((end.tv_nsec - begin.tv_nsec) / 1000000.0) << endl;
 
     return 0;
 }

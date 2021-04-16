@@ -94,19 +94,21 @@ void *partitionOne(void *data)
     */
     //syn.unlock();
 
-    struct timespec begin, end;
-    clock_gettime(CLOCK_MONOTONIC, &begin);
-
     partition(arr_data, 0, right - left - 1);
-    clock_gettime(CLOCK_MONOTONIC, &end);
-    syn.lock();
 
+    syn.lock();
+    /*
     for (int i = 0; i < right - left; i++)
     {
         cout << arr_data[i] << " ";
     }
     cout << endl;
     cout << ((end.tv_sec - begin.tv_sec) * 1000.0) + ((end.tv_nsec - begin.tv_nsec) / 1000000.0) << endl;
+    */
+    for (int i = left; i < right; i++)
+    {
+        arr2[i] = arr_data[i - left];
+    }
     syn.unlock();
 
     pthread_exit(NULL);
@@ -211,5 +213,14 @@ int main(int argc, char *argv[])
         int status;
         pthread_join(pthread[i], (void **)&status);
     }
+    partition(arr2, 0, N);
+
+    clock_gettime(CLOCK_MONOTONIC, &end);
+    for (int i = 0; i < N; i++)
+    {
+        cout << arr2[i] << " ";
+    }
+    cout << endl;
+    cout << ((end.tv_sec - begin.tv_sec) * 1000.0) + ((end.tv_nsec - begin.tv_nsec) / 1000000.0) << endl;
     return 0;
 }
