@@ -107,6 +107,7 @@ void *partitionOne(void *data)
     */
     for (int i = left; i < right; i++)
     {
+        //cout << arr_data[i - left] << " ";
         arr2[i] = arr_data[i - left];
     }
     syn.unlock();
@@ -214,7 +215,7 @@ int main(int argc, char *argv[])
         pthread_join(pthread[i], (void **)&status);
     }
     //final sort
-    partition(arr2, 0, N);
+    partition(arr2, 0, N - 1);
 
     clock_gettime(CLOCK_MONOTONIC, &end);
     for (int i = 0; i < N; i++)
