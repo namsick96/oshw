@@ -4,7 +4,11 @@
 #include <sys/wait.h>
 #include <unistd.h>
 #include <vector>
-
+/* 
+code by 
+namsick96
+0420
+*/
 using namespace std;
 
 int N;
@@ -109,8 +113,8 @@ int main(int argc, char *argv[])
     int divide_num = 1;
 
     scanf("%d", &N);
-    arr1 = new int[N];
-    arr2 = new int[N];
+    arr1 = new int[N]; // input store
+    arr2 = new int[N]; //answer
 
     vector<pair<int, int> > idx_pair = index_pair(N, total_process_num);
 
@@ -144,8 +148,8 @@ int main(int argc, char *argv[])
             //child
             close(fd[1]);
             close(fd2[0]);
-            dup2(fd[0], STDIN_FILENO);
-            dup2(fd2[1], STDOUT_FILENO);
+            dup2(fd[0], STDIN_FILENO);   //piping
+            dup2(fd2[1], STDOUT_FILENO); //piping
 
             string temp2 = "program2";
             char *temp = new char[temp2.size() + 1];
@@ -165,12 +169,12 @@ int main(int argc, char *argv[])
         {
             close(fd[0]);
             close(fd2[1]);
-            int tempdup = dup(STDOUT_FILENO);
+            int tempdup = dup(STDOUT_FILENO); //for rollback
             if (fd[1] != 1)
             {
                 dup2(fd[1], STDOUT_FILENO);
             }
-            int tempdup2 = dup(STDIN_FILENO);
+            int tempdup2 = dup(STDIN_FILENO); //for rollback
             if (fd2[0] != 0)
             {
                 dup2(fd2[0], STDIN_FILENO);
@@ -188,7 +192,7 @@ int main(int argc, char *argv[])
             {
                 cin >> arr2[k];
             }
-            dup2(tempdup2, STDIN_FILENO);
+            dup2(tempdup2, STDIN_FILENO); // rollback. std table
             dup2(tempdup, STDOUT_FILENO); //rechange, roll back std table
             waitpid(pid, &status, WUNTRACED);
             /*

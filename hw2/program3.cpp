@@ -6,7 +6,11 @@
 #include <vector>
 #include <mutex>
 #include <pthread.h>
-
+/* 
+code by 
+namsick96
+0420
+*/
 using namespace std;
 
 mutex syn; //for synchronization
@@ -15,6 +19,7 @@ int N;
 int *arr1;
 int *arr2;
 
+//thread args
 struct ThreadArgs
 {
     int left;
@@ -198,7 +203,7 @@ int main(int argc, char *argv[])
         threadArgs->th_num = i;
         //test
         //cout << i << endl;
-
+        //throw thread
         int thread_id = pthread_create(&pthread[i], NULL, partitionOne, (void *)threadArgs);
 
         if (thread_id < 0)

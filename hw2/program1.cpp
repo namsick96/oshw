@@ -3,6 +3,11 @@
 #include <sys/time.h>
 #include <unistd.h>
 #include <cstring>
+/* 
+code by 
+namsick96
+0420
+*/
 
 using namespace std;
 
@@ -76,6 +81,7 @@ int main(int argc, char *argv[])
     {
         cout << arr1[i] << " ";
     }
+    //case when program2 calls program1
     const char *str1 = "program2";
     if ((strcmp(str1, argv[0]) == 0))
     {
@@ -83,6 +89,7 @@ int main(int argc, char *argv[])
     else
     {
         cout << "\n";
+        //this is ms calc
         cout << ((end.tv_sec - begin.tv_sec) * 1000.0) + ((end.tv_nsec - begin.tv_nsec) / 1000000.0) << endl;
     }
 
