@@ -2,6 +2,7 @@
 #include <string>
 #include <string.h>
 #include <queue>
+#include <deque>
 #include "Job.h"
 
 #ifndef __SCHEDULER__
@@ -10,11 +11,13 @@
 class scheduler
 {
 public:
-    queue<Job *> *run_queue;
+    deque<Job *> *run_queue;
+    Job *nullJob;
 
-    scheduler(queue<Job *> *runQueue)
+    scheduler(deque<Job *> *runQueue, Job *null_Job)
     {
         run_queue = runQueue;
+        nullJob = null_Job;
     }
 
     Job *scheduling(Job *currentCpuJob);

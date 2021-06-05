@@ -1,6 +1,6 @@
 #include "check_sleep.h"
 
-void check_sleep(queue<Job *> *run_queue, list<Job *> &sleepList)
+void check_sleep(deque<Job *> *run_queue, list<Job *> &sleepList)
 {
     list<Job *>::iterator job_iter;
     list<Job *> temp;
@@ -14,7 +14,7 @@ void check_sleep(queue<Job *> *run_queue, list<Job *> &sleepList)
             temp.push_back(job);
             int jobPriority = job->priority;
             job->timeQuantum = 10;
-            run_queue[jobPriority].push(job); // go back to runqueue
+            run_queue[jobPriority].push_back(job); // go back to runqueue
         }
     }
 

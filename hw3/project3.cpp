@@ -9,6 +9,7 @@
 #include <fstream>
 #include <unistd.h>
 #include <queue>
+#include <deque>
 //My
 #include "Job.h"
 #include "InputIO.h"
@@ -16,6 +17,10 @@
 #include "check_sleep.h"
 #include "check_ioWait.h"
 #include "check_jobToRun.h"
+#include "status_update.h"
+#include "commandExecute.h"
+#include "printSchedLog.h"
+#include "updateStatus.h"
 
 using namespace std;
 
@@ -93,11 +98,11 @@ int main(int argc, char *argv[])
         }
     }
 
-    queue<Job *> run_queue[10];
+    deque<Job *> run_queue[10];
     list<Job *> sleepList;
     list<Job *> ioWaitList;
     list<Job *> endProcess;
-    // list<int> lockList; 이건 뭘까
+    list<int> lockList; //이건 뭘까
     /*
 메모리 설정 넣자
 
@@ -105,8 +110,11 @@ int main(int argc, char *argv[])
     // main loop
     int inProcessing = jobs_list.size();
     int currentCycle = -1;
-    scheduler schedulerBot = scheduler(run_queue);
-    Job *currentCpuJob = new Job(-1, "/", "NULL", -1, -1); //null job
+
+    Job *nullJob = new Job(-1, "/", "NULL", -1, -1); //nulljob initiate once for reusable at each method
+    Job *currentCpuJob = nullJob;                    //null job
+
+    scheduler schedulerBot = scheduler(run_queue, nullJob);
 
     string schedule_output = dir + "/scheduler.txt";
     FILE *fp_sched = fopen(schedule_output.c_str(), "w");
@@ -129,7 +137,36 @@ int main(int argc, char *argv[])
 
         // step 4
         currentCpuJob = schedulerBot.scheduling(currentCpuJob);
+
+        //each task status update for report
+        status_update(currentCpuJob, run_queue, currentCycle);
+
+        // step 5
+        commandExecute(currentCpuJob, sleepList, ioWaitList, lockList, runningJobs_list, currentCycle); // & all_pages, physicalMemory, sched, page, allocationID, physicalMemorySize, currentCycle, page_fault);
+
+        // step 6
+        printSchedLog(fp_sched, currentCpuJob, run_queue, sleepList, ioWaitList, currentCycle);
+
+        // step 7
+        updateStatus(currentCpuJob, run_queue, runningJobs_list, sleepList, ioWaitList, endProcess, currentCycle, timeInterval, nullJob); // physicalMemory, physicalMemorySize, currentCycle, timeInterval);
+
+        // check number of running process
+        //runque 개수
+        inProcessing = 0;
+        for (int k = 0; k < 10; k++)
+        {
+            inProcessing = inProcessing + run_queue[k].size();
+        }
+
+        inProcessing = inProcessing + sleepList.size() + ioWaitList.size();
+        if (currentCpuJob->pid != -1)
+        {
+            inProcessing++;
+        }
     }
+    // donedone dance
+    std::fclose(fp_sched);
+    std::fclose(fp_memory);
 }
 /*
     int physicalMemorySize = pmemSize/pageSize;

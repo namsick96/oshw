@@ -1,10 +1,10 @@
 #include "Job.h"
-/*
+
 void Job::setData(int vmemSize, int pageSize)
 {
 
     pageTableSize = vmemSize / pageSize;
-
+    /*
     pageTable_aid = new PageBundle *[pageTableSize];
     pageTable_valid = new PageBundle *[pageTableSize];
 
@@ -20,7 +20,7 @@ void Job::setData(int vmemSize, int pageSize)
             pageTable_aid[i] = nullptr;
             pageTable_valid[i] = nullptr;
         }
-    }
+    }*/
 
     ifstream process;
     string process_name = directory + "/" + file_name;
@@ -29,26 +29,24 @@ void Job::setData(int vmemSize, int pageSize)
     process >> cmd_num;
     for (int i = 0; i < cmd_num; i++)
     {
-        int *cmd = new int[2];
-        for (int k = 0; k < 2; k++)
-        {
-            process >> cmd[k];
-        }
-        cmd_list.push_back(cmd);
+        int op;
+        int val;
+        process >> op >> val;
+
+        pair<int, int> oneline = make_pair(op, val);
+        cmd_list.push_back(oneline);
     }
     process.close();
-
-    current_cmd = cmd_list.begin();
-    current_cmd_int = 1;
+    current_cmd_int = 0;
 }
-*/
+
 void Job::printCmd()
 {
     printf("%d  %d  %s\n", pid, cmd_num, file_name.c_str());
-    vector<int *>::iterator iter = cmd_list.begin();
+    vector<pair<int, int> >::iterator iter = cmd_list.begin();
     for (; iter != cmd_list.end(); iter++)
     {
-        int *cmd = *iter;
-        printf("cmd : %d   | opt : %d\n", cmd[0], cmd[1]);
+        pair<int, int> cmd = *iter;
+        printf("cmd : %d   | opt : %d\n", cmd.first, cmd.second);
     }
 }

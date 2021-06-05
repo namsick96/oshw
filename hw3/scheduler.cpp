@@ -16,16 +16,19 @@ Job *scheduler::scheduling(Job *currentCpuJob)
         }
     }
     //No Scheduling item
+    //Null task go
     //in this case nullJob preceed
-    if (readyQueueTopPriority == 10)
+    if (readyQueueTopPriority == 10 && currentPriority == -1)
     {
         return currentCpuJob;
     }
     //initiating new process at ready_queue
-    if (currentPriority == -1)
+    //Nulljob iter finish, new job ready. change to newjob
+    if (readyQueueTopPriority != 10 && currentPriority == -1)
     {
         job = run_queue[readyQueueTopPriority].front();
-        run_queue[readyQueueTopPriority].pop();
+        job->runningTime = 0;
+        run_queue[readyQueueTopPriority].pop_front();
         return job;
     }
 
@@ -34,10 +37,12 @@ Job *scheduler::scheduling(Job *currentCpuJob)
     {
         //new job
         job = run_queue[readyQueueTopPriority].front();
-        run_queue[readyQueueTopPriority].pop();
-        //initialize timeQuantum
+        job->runningTime = 0;
+        run_queue[readyQueueTopPriority].pop_front();
+
+        //initialize timeQuantum and go back to ready queue
         currentCpuJob->timeQuantum = 10;
-        run_queue[currentPriority].push(currentCpuJob);
+        run_queue[currentPriority].push_back(currentCpuJob);
         return job;
     }
     else
@@ -54,12 +59,23 @@ Job *scheduler::scheduling(Job *currentCpuJob)
             if (timeQ == 0)
             {
                 //new job
-                job = run_queue[readyQueueTopPriority].front();
-                run_queue[readyQueueTopPriority].pop();
-                //initialize timeQuantum
-                currentCpuJob->timeQuantum = 10;
-                run_queue[currentPriority].push(currentCpuJob);
-                return job;
+                if (readyQueueTopPriority != 10)
+                {
+                    job = run_queue[readyQueueTopPriority].front();
+                    run_queue[readyQueueTopPriority].pop_front();
+                    job->runningTime = 0;
+                    //initialize timeQuantum
+                    currentCpuJob->timeQuantum = 10;
+                    run_queue[currentPriority].push_back(currentCpuJob);
+                    return job;
+                }
+                else
+                {
+                    currentCpuJob->timeQuantum = 10;
+                    run_queue[currentPriority].push_back(currentCpuJob);
+                    currentCpuJob->runningTime = 0;
+                    return nullJob;
+                }
             }
             else
             {

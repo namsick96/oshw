@@ -1,6 +1,6 @@
 #include "check_ioWait.h"
 
-void check_ioWait(queue<Job *> *run_queue, list<Job *> &ioWaitList, vector<InputIO *> &input_list, int currentCycle)
+void check_ioWait(deque<Job *> *run_queue, list<Job *> &ioWaitList, vector<InputIO *> &input_list, int currentCycle)
 {
     list<Job *>::iterator job_iter;
     //list<InputIO *>::iterator io_iter;
@@ -25,7 +25,7 @@ void check_ioWait(queue<Job *> *run_queue, list<Job *> &ioWaitList, vector<Input
                     {
                         tempJob.push_back(job); // append for delete check
                         job->timeQuantum = 10;
-                        run_queue[job->priority].push(job); // append for run, input done
+                        run_queue[job->priority].push_back(job); // append for run, input done
                     }
                     else
                     { //what is this? check when memory case

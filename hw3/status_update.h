@@ -2,12 +2,13 @@
 #include <list>
 #include <vector>
 #include <queue>
+#include <deque>
 
-#ifndef PRACTICE1_REPORT_CRITERIA_H
-#define PRACTICE1_REPORT_CRITERIA_H
+#ifndef __status_update__
+#define __status_update__
 
 using namespace std;
 
-void report_criteria(Task *&currentCpuTask, list<Task *> *run_queue, int currentCycle);
+void status_update(Job *&currentCpuTask, deque<Job *> *run_queue, int currentCycle);
 
-#endif //PRACTICE1_REPORT_CRITERIA_H
+#endif //status_update
