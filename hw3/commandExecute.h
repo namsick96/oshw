@@ -12,6 +12,7 @@
 #include <list>
 #include <deque>
 #include <vector>
+#include <iostream>
 
 #ifndef __COMMANDEXECUTE__
 #define __COMMANDEXECUTE__

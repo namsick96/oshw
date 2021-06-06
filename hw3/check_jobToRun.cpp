@@ -1,4 +1,4 @@
-#include "check_JobToRun.h"
+#include "check_jobToRun.h"
 
 void check_jobToRun(deque<Job *> *run_queue, list<Job *> &runningJobs_list, vector<Job *> &jobs_list, int currentCycle)
 {

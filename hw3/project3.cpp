@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
     ifstream infile;
     infile.open(input_file.c_str());
     infile >> totalEventNum >> vmSize >> pmSize >> pageSize;
-    cout << totalEventNum << vmSize << pmSize << pageSize;
+    cout << totalEventNum << vmSize << pmSize << pageSize << "\n";
 
     vector<Job *> jobs_list;
     list<Job *> runningJobs_list;
@@ -122,9 +122,12 @@ int main(int argc, char *argv[])
     string memory_output = dir + "/memory.txt";
     FILE *fp_memory = fopen(memory_output.c_str(), "w");
 
-    while (inProcessing > 0)
+    cout << "Hi Hello" << endl;
+
+    while (endProcess.size() != inProcessing)
     {
         currentCycle++;
+        //cout << currentCycle << "\n";
 
         // step 1
         check_sleep(run_queue, sleepList);
@@ -135,23 +138,28 @@ int main(int argc, char *argv[])
         // step 3
         check_jobToRun(run_queue, runningJobs_list, jobs_list, currentCycle);
 
+        cout << run_queue[6].size() << endl;
+        //cout << currentCycle << "\n";
         // step 4
         currentCpuJob = schedulerBot.scheduling(currentCpuJob);
-
+        //cout << currentCycle << "\n";
         //each task status update for report
         status_update(currentCpuJob, run_queue, currentCycle);
-
+        //cout << currentCycle << "\n";
         // step 5
         commandExecute(currentCpuJob, sleepList, ioWaitList, lockList, runningJobs_list, currentCycle); // & all_pages, physicalMemory, sched, page, allocationID, physicalMemorySize, currentCycle, page_fault);
-
+        //cout << currentCycle << "\n";
         // step 6
         printSchedLog(fp_sched, currentCpuJob, run_queue, sleepList, ioWaitList, currentCycle);
-
+        //cout << currentCycle << "\n";
         // step 7
         updateStatus(currentCpuJob, run_queue, runningJobs_list, sleepList, ioWaitList, endProcess, currentCycle, timeInterval, nullJob); // physicalMemory, physicalMemorySize, currentCycle, timeInterval);
-
+        cout << currentCycle << "\n";
+        cout << "endProcessNum is" << endProcess.size() << endl;
+        cout << "InProcessing: " << inProcessing << endl;
         // check number of running process
         //runque 개수
+        /*
         inProcessing = 0;
         for (int k = 0; k < 10; k++)
         {
@@ -162,7 +170,7 @@ int main(int argc, char *argv[])
         if (currentCpuJob->pid != -1)
         {
             inProcessing++;
-        }
+        }*/
     }
     // donedone dance
     std::fclose(fp_sched);

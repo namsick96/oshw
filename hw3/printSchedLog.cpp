@@ -15,10 +15,11 @@ void printSchedLog(FILE *out, Job *&currentCpuJob, deque<Job *> *run_queue, list
 
     pid = currentCpuJob->pid;
     name = currentCpuJob->file_name.c_str();
+    priority = currentCpuJob->priority;
 
     if (currentCpuJob->pid != -1)
     {
-        opidx = currentCpuJob->current_cmd_int;
+        opidx = currentCpuJob->current_cmd_int - 1;
         line = opidx + 1;
         op = currentCpuJob->cmd_list[opidx].first;
         arg = currentCpuJob->cmd_list[opidx].second;
@@ -47,9 +48,9 @@ void printSchedLog(FILE *out, Job *&currentCpuJob, deque<Job *> *run_queue, list
     }
 
     // line 3 runque
-    fprintf(out, "RunQueue: ");
     for (int k = 0; k < 10; k++)
     {
+        fprintf(out, "RunQueue: %d: ", k);
         if (run_queue[k].empty())
         {
             fprintf(out, "Empty\n");

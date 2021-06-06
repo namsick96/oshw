@@ -1,4 +1,5 @@
 #include "scheduler.h"
+#include <iostream>
 
 Job *scheduler::scheduling(Job *currentCpuJob)
 {
@@ -15,6 +16,7 @@ Job *scheduler::scheduling(Job *currentCpuJob)
             break;
         }
     }
+    cout << readyQueueTopPriority << endl; //for checking
     //No Scheduling item
     //Null task go
     //in this case nullJob preceed

@@ -9,4 +9,4 @@
 
 void check_jobToRun(deque<Job *> *run_queue, list<Job *> &runningJobs_list, vector<Job *> &jobs_list, int currentCycle);
 
-#endif //PRACTICE1_CHECK_TASKTORUN_H
+#endif
