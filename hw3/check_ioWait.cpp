@@ -21,7 +21,7 @@ void check_ioWait(deque<Job *> *run_queue, list<Job *> &ioWaitList, vector<Input
 
                 if (job->pid == input_list[k]->target_pid)
                 {
-                    if (job->memoryCursor != 10)
+                    if (job->pageTableidx != 10)
                     {
                         tempJob.push_back(job); // append for delete check
                         job->timeQuantum = 10;

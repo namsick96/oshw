@@ -17,6 +17,8 @@ void printSchedLog(FILE *out, Job *&currentCpuJob, deque<Job *> *run_queue, list
     name = currentCpuJob->file_name.c_str();
     priority = currentCpuJob->priority;
 
+    //printf("sched start\n");
+
     if (currentCpuJob->pid != -1)
     {
         opidx = currentCpuJob->current_cmd_int - 1;
@@ -25,9 +27,11 @@ void printSchedLog(FILE *out, Job *&currentCpuJob, deque<Job *> *run_queue, list
         arg = currentCpuJob->cmd_list[opidx].second;
     }
 
+    //printf("oplineidxline\n");
+
     // line 1
     fprintf(out, "[%d Cycle] Scheduled Process: ", cycle);
-    if (currentCpuJob->runningTime == 0)
+    if (currentCpuJob->runningTime == -1)
     {
         fprintf(out, "%d %s (priority %d)\n", pid, name, priority);
     }
@@ -35,7 +39,7 @@ void printSchedLog(FILE *out, Job *&currentCpuJob, deque<Job *> *run_queue, list
     {
         fprintf(out, "None\n");
     }
-
+    //printf("line1");
     // line 2
     fprintf(out, "Running Process: ");
     if (currentCpuJob->pid != -1)
@@ -46,6 +50,7 @@ void printSchedLog(FILE *out, Job *&currentCpuJob, deque<Job *> *run_queue, list
     {
         fprintf(out, "None\n");
     }
+    //printf("line2");
 
     // line 3 runque
     for (int k = 0; k < 10; k++)

@@ -1,14 +1,14 @@
 #include "status_update.h"
 
-void status_update(Job *&currentCpuTask, deque<Job *> *run_queue, int currentCycle)
+void status_update(Job *&currentCpuJob, deque<Job *> *run_queue, int currentCycle)
 {
-    if (currentCpuTask->pid != -1)
+    if (currentCpuJob->pid != -1)
     {
         // check response time by real start time -starting time
-        if (currentCpuTask->responseTime == -1)
+        if (currentCpuJob->responseTime == -1)
         {
-            currentCpuTask->responseTime = currentCycle - currentCpuTask->startCycle;
-            currentCpuTask->realStartTime = currentCycle;
+            currentCpuJob->responseTime = currentCycle - currentCpuJob->startCycle;
+            currentCpuJob->realStartTime = currentCycle;
         }
 
         // count waiting time

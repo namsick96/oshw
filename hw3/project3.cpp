@@ -21,6 +21,7 @@
 #include "commandExecute.h"
 #include "printSchedLog.h"
 #include "updateStatus.h"
+#include "PhysicalMemoryTree.h"
 
 using namespace std;
 
@@ -31,7 +32,7 @@ int main(int argc, char *argv[])
     getcwd(tempDir, 256);
     string dir = tempDir;
 
-    int allocationID = 1;
+    //int allocationID = 0;
     int timeInterval = 0; // time interval for lru-sample
     int page_fault = 0;
     int accessCounter = 0;
@@ -67,7 +68,7 @@ int main(int argc, char *argv[])
     ifstream infile;
     infile.open(input_file.c_str());
     infile >> totalEventNum >> vmSize >> pmSize >> pageSize;
-    cout << totalEventNum << vmSize << pmSize << pageSize << "\n";
+    //cout << totalEventNum << vmSize << pmSize << pageSize << "\n";
 
     vector<Job *> jobs_list;
     list<Job *> runningJobs_list;
@@ -102,11 +103,15 @@ int main(int argc, char *argv[])
     list<Job *> sleepList;
     list<Job *> ioWaitList;
     list<Job *> endProcess;
-    list<int> lockList; //이건 뭘까
-    /*
-메모리 설정 넣자
 
-*/
+    cout << "physicalMem" << endl;
+
+    //physical memory
+    int physicalMemoryFrameNum = pmSize / pageSize;
+    PhysicalMemoryTree physicalMemory = PhysicalMemoryTree(physicalMemoryFrameNum);
+
+    cout << "physic" << endl;
+
     // main loop
     int inProcessing = jobs_list.size();
     int currentCycle = -1;
@@ -138,22 +143,27 @@ int main(int argc, char *argv[])
         // step 3
         check_jobToRun(run_queue, runningJobs_list, jobs_list, currentCycle);
 
-        cout << run_queue[6].size() << endl;
+        //cout << run_queue[6].size() << endl;
         //cout << currentCycle << "\n";
         // step 4
         currentCpuJob = schedulerBot.scheduling(currentCpuJob);
         //cout << currentCycle << "\n";
         //each task status update for report
-        status_update(currentCpuJob, run_queue, currentCycle);
-        //cout << currentCycle << "\n";
+        //status_update(currentCpuJob, run_queue, currentCycle); this code goes to updateStatus
+        //cout << "scheduling done"<< "\n";
         // step 5
-        commandExecute(currentCpuJob, sleepList, ioWaitList, lockList, runningJobs_list, currentCycle); // & all_pages, physicalMemory, sched, page, allocationID, physicalMemorySize, currentCycle, page_fault);
-        //cout << currentCycle << "\n";
+        commandExecute(currentCpuJob, sleepList, ioWaitList, runningJobs_list, currentCycle, physicalMemory, page, page_fault); //physicalMemory,page,page_fault만 더 추가하기// & all_pages, physicalMemory, page, allocationID, page_fault);
+        //cout << "executeDone"
+        //    << "\n";
+        //sleep(1);
+        //cout << "reallyexecute" << endl;
         // step 6
         printSchedLog(fp_sched, currentCpuJob, run_queue, sleepList, ioWaitList, currentCycle);
-        //cout << currentCycle << "\n";
+        //printMemoryLog()
+        //cout << "printSchedDone"
+        //     << "\n";
         // step 7
-        updateStatus(currentCpuJob, run_queue, runningJobs_list, sleepList, ioWaitList, endProcess, currentCycle, timeInterval, nullJob); // physicalMemory, physicalMemorySize, currentCycle, timeInterval);
+        updateStatus(currentCpuJob, run_queue, runningJobs_list, sleepList, ioWaitList, endProcess, currentCycle, timeInterval, nullJob); // physicalMemory만 더 추가하기;
         cout << currentCycle << "\n";
         cout << "endProcessNum is" << endProcess.size() << endl;
         cout << "InProcessing: " << inProcessing << endl;
@@ -173,6 +183,7 @@ int main(int argc, char *argv[])
         }*/
     }
     // donedone dance
+    fprintf(fp_memory, "page fault = %d\n", page_fault);
     std::fclose(fp_sched);
     std::fclose(fp_memory);
 }

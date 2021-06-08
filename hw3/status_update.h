@@ -9,6 +9,6 @@
 
 using namespace std;
 
-void status_update(Job *&currentCpuTask, deque<Job *> *run_queue, int currentCycle);
+void status_update(Job *&currentCpuJob, deque<Job *> *run_queue, int currentCycle);
 
 #endif //status_update
