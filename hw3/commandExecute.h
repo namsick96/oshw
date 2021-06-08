@@ -1,13 +1,4 @@
-/*
-#include "cmd_ioWait.h"
-#include "cmd_sleep.h"
-#include "cmd_malloc.h"
-#include "cmd_memFree.h"
-#include "cmd_lock.h"
-#include "cmd_unlock.h"
-#include "cmd_memAccess.h"
-#include "PageBundle.h"
-*/
+
 #include "opIOwait.h"
 #include "opSleep.h"
 #include "Job.h"
@@ -17,6 +8,8 @@
 #include <iostream>
 #include "PhysicalMemoryTree.h"
 #include "cmd_malloc.h"
+#include "cmd_memAccess.h"
+#include "cmd_memFree.h"
 
 #ifndef __COMMANDEXECUTE__
 #define __COMMANDEXECUTE__

@@ -1,5 +1,6 @@
 #include <list>
 #include <math.h>
+#include <stack>
 #ifndef __PHYSICALMEMORYTREE__
 #define __PHYSICALMEMORYTREE__
 
@@ -7,6 +8,8 @@ using namespace std;
 
 class TreeNode
 {
+    friend class PhysicalMemoryTree;
+
 public:
     int frameNum;
     TreeNode *left = nullptr;
@@ -14,34 +17,45 @@ public:
     TreeNode *parent;
     TreeNode *buddy = nullptr;
 
-    int allocationID;
+    bool splited = false;
+
+    int allocationID = -1;
+    int pageID = -1;
 
     TreeNode(int framenum, TreeNode *nodeParent)
     {
         frameNum = framenum;
         parent = nodeParent;
     }
+    void make_child();
+    void sumup_child();
 };
 
 class PhysicalMemoryTree
 {
+    friend class TreeNode;
+
 public:
     // int reference_bit;
     // list<int> reference_byte;
 
     // int frameNum;
-    int allocationID;
+    int physical_final_allocationID;
     TreeNode *root;
-    int wholeFramesize;
+    int wholeFramenum;
+    list<int> pageID_stack;
     PhysicalMemoryTree(int framenum)
     {
-        wholeFramesize = framenum;
-        allocationID = 0;
+        wholeFramenum = framenum;
+        physical_final_allocationID = 0;
         root = new TreeNode(framenum, nullptr);
     }
-    void make_child(TreeNode *&current);
-    void sumup_child(TreeNode *&current);
+    //void make_child(TreeNode *&current);
+    //void sumup_child(TreeNode *&current);
+    void wrapUp(TreeNode *&current);
     pair<TreeNode *, TreeNode *> childPairReturn(TreeNode *&current);
+    TreeNode *findPage(TreeNode *&current, int page_id);
+    TreeNode *findProperNode(TreeNode *&current, int frame_num);
 };
 /*
 class PageBundle

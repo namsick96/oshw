@@ -25,11 +25,13 @@ void commandExecute(Job *&currentCpuJob, list<Job *> &sleepList, list<Job *> &io
         }
         else if (op == 1)
         {
-            //memory release
+            //memory access
+            cmd_memAccess(currentCpuJob, physicalMemory, opparam, currentCycle, page, page_fault);
         }
         else if (op == 2)
         {
             //memory release
+            cmd_memFree(currentCpuJob, physicalMemory, opparam);
         }
         else if (op == 3)
         {

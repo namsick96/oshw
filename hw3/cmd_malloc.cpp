@@ -23,9 +23,7 @@ void cmd_malloc(Job *&currentCpuJob, int opparam)
             { //allocate in virtual memory not in physical memory
                 for (int k = 0; k < opparam; k++)
                 {
-                    currentCpuJob->pageTable->pageIDv[i + k] = currentCpuJob->pageTableFinalPageID++;
-                    currentCpuJob->pageTableFinalPageID++;
-                    cout << "virtual Allocated" << endl;
+                    currentCpuJob->pageTable->pageIDv[i + k] = currentCpuJob->pageTableFinalPageID;
                 }
                 break; // allocation Done
             }
