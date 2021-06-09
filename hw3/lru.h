@@ -1,5 +1,5 @@
 #include <string>
-#include <cstring>
+#include <string.h>
 #include <list>
 #include "Job.h"
 #include "PhysicalMemoryTree.h"
