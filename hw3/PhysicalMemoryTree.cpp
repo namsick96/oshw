@@ -72,9 +72,8 @@ TreeNode *PhysicalMemoryTree::findProperNode(TreeNode *&current, int frame_num)
     {
         return nullptr;
     }
-
     //노드를 쪼개야할때
-    if (current->allocationID == -1 && current->frameNum / 2 < frame_num && !current->splited)
+    if (current->allocationID == -1 && current->frameNum / 2 > frame_num && !current->splited)
     {
         current->make_child();
         TreeNode *leftRecur = findProperNode(current->left, frame_num);
@@ -95,6 +94,7 @@ TreeNode *PhysicalMemoryTree::findProperNode(TreeNode *&current, int frame_num)
     }
     else
     {
+
         return nullptr;
     }
 

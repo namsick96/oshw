@@ -5,6 +5,6 @@
 #ifndef __LRU__
 #define __LRU__
 
-int lru(Job *&currentCpuJob, PhysicalMemoryTree &physicalMemory);
+void lru(Job *&currentCpuJob, PhysicalMemoryTree &physicalMemory);
 
 #endif //PRACTICE1_PAGECHANGE_LRU_H

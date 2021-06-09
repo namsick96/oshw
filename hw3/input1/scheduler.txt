@@ -269,7 +269,7 @@ SleepList: 1(program10)
 IOWait List: Empty
 
 [18 Cycle] Scheduled Process: None
-Running Process: Process#1(3) running code program10 line 4(op 3, arg 0)
+Running Process: Process#1(3) running code program10 line 4(op 0, arg 5)
 RunQueue: 0: Empty
 RunQueue: 1: Empty
 RunQueue: 2: Empty
@@ -299,6 +299,51 @@ SleepList: Empty
 IOWait List: Empty
 
 [20 Cycle] Scheduled Process: None
+Running Process: Process#1(3) running code program10 line 6(op 3, arg 0)
+RunQueue: 0: Empty
+RunQueue: 1: Empty
+RunQueue: 2: Empty
+RunQueue: 3: Empty
+RunQueue: 4: Empty
+RunQueue: 5: Empty
+RunQueue: 6: 0(program0)
+RunQueue: 7: Empty
+RunQueue: 8: Empty
+RunQueue: 9: Empty
+SleepList: Empty
+IOWait List: Empty
+
+[21 Cycle] Scheduled Process: None
+Running Process: Process#1(3) running code program10 line 7(op 3, arg 0)
+RunQueue: 0: Empty
+RunQueue: 1: Empty
+RunQueue: 2: Empty
+RunQueue: 3: Empty
+RunQueue: 4: Empty
+RunQueue: 5: Empty
+RunQueue: 6: 0(program0)
+RunQueue: 7: Empty
+RunQueue: 8: Empty
+RunQueue: 9: Empty
+SleepList: Empty
+IOWait List: Empty
+
+[22 Cycle] Scheduled Process: None
+Running Process: Process#1(3) running code program10 line 8(op 3, arg 0)
+RunQueue: 0: Empty
+RunQueue: 1: Empty
+RunQueue: 2: Empty
+RunQueue: 3: Empty
+RunQueue: 4: Empty
+RunQueue: 5: Empty
+RunQueue: 6: 0(program0)
+RunQueue: 7: Empty
+RunQueue: 8: Empty
+RunQueue: 9: Empty
+SleepList: Empty
+IOWait List: Empty
+
+[23 Cycle] Scheduled Process: None
 Running Process: Process#0(6) running code program0 line 15(op 3, arg 0)
 RunQueue: 0: Empty
 RunQueue: 1: Empty
@@ -313,7 +358,7 @@ RunQueue: 9: Empty
 SleepList: Empty
 IOWait List: Empty
 
-[21 Cycle] Scheduled Process: None
+[24 Cycle] Scheduled Process: None
 Running Process: Process#0(6) running code program0 line 16(op 4, arg 1)
 RunQueue: 0: Empty
 RunQueue: 1: Empty

@@ -1,5 +1,4 @@
 #include "cmd_malloc.h"
-#include <iostream>
 
 void cmd_malloc(Job *&currentCpuJob, int opparam)
 {
@@ -24,7 +23,9 @@ void cmd_malloc(Job *&currentCpuJob, int opparam)
                 for (int k = 0; k < opparam; k++)
                 {
                     currentCpuJob->pageTable->pageIDv[i + k] = currentCpuJob->pageTableFinalPageID;
+                    currentCpuJob->pageTable->validBitv[i + k] = 0;
                 }
+                currentCpuJob->pageTableFinalPageID++;
                 break; // allocation Done
             }
         }

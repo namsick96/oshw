@@ -53,7 +53,7 @@ public:
     int pageNum;
     int pageSize;
     vector<int> pageIDv;
-    vector<bool> validBitv;
+    vector<int> validBitv;
     vector<int> allocationIDv;
     vector<unsigned char> refereceBitv;
     vector<unsigned char> refereceBytev;
@@ -94,6 +94,7 @@ public:
     int pageTablePageNum;
     int pageTablePagesize;
     int pageTableFinalPageID;
+    int recentUsedPageNum; //pageCount at cmd_memFree
     VirtualMemoryPageTable *pageTable;
 
     //int recentAid; // for print memory log

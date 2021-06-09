@@ -4,6 +4,8 @@ void cmd_memAccess(Job *&currentCpuJob, PhysicalMemoryTree &physicalMemory, int 
 {
     // virtualmemory find page
 
+    //printf("memAccess start\n");
+
     bool startIdxFind = false;
     int pageCount = 0;
     for (int i = 0; i < currentCpuJob->pageTablePageNum; i++)
@@ -20,7 +22,7 @@ void cmd_memAccess(Job *&currentCpuJob, PhysicalMemoryTree &physicalMemory, int 
     }
 
     //physical memory find page(frame)
-    if (currentCpuJob->pageTable->validBitv[currentCpuJob->pageTableidx])
+    if (currentCpuJob->pageTable->validBitv[currentCpuJob->pageTableidx] == 1)
     {
         //physical memory have page find it!
         int targetPageID = currentCpuJob->pageTable->pageIDv[currentCpuJob->pageTableidx];
@@ -37,9 +39,23 @@ void cmd_memAccess(Job *&currentCpuJob, PhysicalMemoryTree &physicalMemory, int 
         //there is no pages on physocal memory
         page_fault++; //increase pagefault
 
+        //test
+        //printf("page fault: %d\n", page_fault);
+
         //pageID == opparam in virtualMemory
         //start at currentCpuJob->pageTableidx and count is pageCount
+        //cout << "hihi" << endl;
+        //test
+        //printf("root allocid: %d, frameNum: %d, pageCount: %d", physicalMemory.root->allocationID, physicalMemory.root->frameNum, pageCount);
+
         TreeNode *targetPhysicalMemBlock = physicalMemory.findProperNode(physicalMemory.root, pageCount);
+        /*
+        cout << targetPhysicalMemBlock->allocationID << endl
+             << targetPhysicalMemBlock->frameNum << endl
+             << pageCount << endl;
+
+        printf("temp\n");
+        printf("%d and %d and %d", targetPhysicalMemBlock->allocationID, targetPhysicalMemBlock->frameNum, pageCount);*/
 
         while (targetPhysicalMemBlock == nullptr)
         {
@@ -76,6 +92,7 @@ void cmd_memAccess(Job *&currentCpuJob, PhysicalMemoryTree &physicalMemory, int 
             //virtual memory update
             for (int k = currentCpuJob->pageTableidx; k < currentCpuJob->pageTableidx + pageCount; k++)
             {
+                currentCpuJob->pageTable->pageIDv[k] = opparam;
                 currentCpuJob->pageTable->allocationIDv[k] = physicalMemory.physical_final_allocationID;
                 currentCpuJob->pageTable->refereceBitv[k] = 1;
                 currentCpuJob->pageTable->validBitv[k] = 1;

@@ -1,6 +1,6 @@
 #include "lru.h"
 
-int lru(Job *&currentCpuJob, PhysicalMemoryTree &physicalMemory)
+void lru(Job *&currentCpuJob, PhysicalMemoryTree &physicalMemory)
 {
     //envict target
     int envictPageID = physicalMemory.pageID_stack.front();

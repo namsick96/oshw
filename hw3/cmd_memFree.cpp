@@ -18,14 +18,14 @@ void cmd_memFree(Job *&currentCpuJob, PhysicalMemoryTree &physicalMemory, int op
             pageCount++;
         }
     }
+    currentCpuJob->recentUsedPageNum = pageCount;
     //physical memory먼저 unload시키기
     int targetPageID = currentCpuJob->pageTable->pageIDv[currentCpuJob->pageTableidx];
     TreeNode *targetPhysicalNode = physicalMemory.findPage(physicalMemory.root, targetPageID);
-    //buddy is not working
     //wrapup method
     targetPhysicalNode->allocationID = -1;
     targetPhysicalNode->pageID = -1;
-    physicalMemory.wrapUp(targetPhysicalNode);
+    physicalMemory.wrapUp(targetPhysicalNode); //버디 시스템으로 메모리 wrapup
 
     //virtual memory unload시키기
     for (int k = currentCpuJob->pageTableidx; k < currentCpuJob->pageTableidx + pageCount; k++)
@@ -34,6 +34,6 @@ void cmd_memFree(Job *&currentCpuJob, PhysicalMemoryTree &physicalMemory, int op
         currentCpuJob->pageTable->allocationIDv[k] = -1;
         currentCpuJob->pageTable->refereceBitv[k] = 0;
         currentCpuJob->pageTable->refereceBytev[k] = 0;
-        currentCpuJob->pageTable->validBitv[k] = 0;
+        currentCpuJob->pageTable->validBitv[k] = -1;
     }
 }

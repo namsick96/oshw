@@ -22,6 +22,7 @@
 #include "printSchedLog.h"
 #include "updateStatus.h"
 #include "PhysicalMemoryTree.h"
+#include "printMemoryLog.h"
 
 using namespace std;
 
@@ -104,13 +105,13 @@ int main(int argc, char *argv[])
     list<Job *> ioWaitList;
     list<Job *> endProcess;
 
-    cout << "physicalMem" << endl;
+    //cout << "physicalMem" << endl;
 
     //physical memory
     int physicalMemoryFrameNum = pmSize / pageSize;
     PhysicalMemoryTree physicalMemory = PhysicalMemoryTree(physicalMemoryFrameNum);
 
-    cout << "physic" << endl;
+    //cout << "physic" << endl;
 
     // main loop
     int inProcessing = jobs_list.size();
@@ -152,18 +153,18 @@ int main(int argc, char *argv[])
         //status_update(currentCpuJob, run_queue, currentCycle); this code goes to updateStatus
         //cout << "scheduling done"<< "\n";
         // step 5
-        commandExecute(currentCpuJob, sleepList, ioWaitList, runningJobs_list, currentCycle, physicalMemory, page, page_fault); //physicalMemory,page,page_fault만 더 추가하기// & all_pages, physicalMemory, page, allocationID, page_fault);
+        commandExecute(currentCpuJob, sleepList, ioWaitList, runningJobs_list, currentCycle, physicalMemory, page, page_fault);
         //cout << "executeDone"
         //    << "\n";
         //sleep(1);
         //cout << "reallyexecute" << endl;
         // step 6
         printSchedLog(fp_sched, currentCpuJob, run_queue, sleepList, ioWaitList, currentCycle);
-        //printMemoryLog()
+        printMemoryLog(fp_memory, currentCpuJob, run_queue, sleepList, ioWaitList, physicalMemory, page, currentCycle, page_fault);
         //cout << "printSchedDone"
         //     << "\n";
         // step 7
-        updateStatus(currentCpuJob, run_queue, runningJobs_list, sleepList, ioWaitList, endProcess, currentCycle, timeInterval, nullJob); // physicalMemory만 더 추가하기;
+        updateStatus(currentCpuJob, run_queue, runningJobs_list, sleepList, ioWaitList, endProcess, currentCycle, timeInterval, nullJob, physicalMemory, page); // physicalMemory만 더 추가하기;
         cout << currentCycle << "\n";
         cout << "endProcessNum is" << endProcess.size() << endl;
         cout << "InProcessing: " << inProcessing << endl;

@@ -13,7 +13,7 @@ void Job::setData(int vmemSize, int pageSize)
     {
         pageTable->pageIDv.push_back(-1);
         pageTable->allocationIDv.push_back(-1);
-        pageTable->validBitv.push_back(0);
+        pageTable->validBitv.push_back(-1);
         pageTable->refereceBitv.push_back(0);
         pageTable->refereceBytev.push_back(0);
         //pageTable->table[k] = nullptr;
