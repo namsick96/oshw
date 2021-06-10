@@ -24,10 +24,11 @@ void cmd_memFree(Job *&currentCpuJob, PhysicalMemoryTree &physicalMemory, int op
     currentCpuJob->recentUsedPageNum = pageCount;
     //physical memory먼저 unload시키기
     int targetAllocID = currentCpuJob->pageTable->allocationIDv[currentCpuJob->pageTableidx];
-    if (targetAllocID != -1)
+    TreeNode *targetPhysicalNode = physicalMemory.findAllocID(physicalMemory.root, targetAllocID);
+    if (targetAllocID != -1 && targetPhysicalNode != nullptr)
     {
         //printf("cmd_memFree: casw11: %d\n", targetAllocID);
-        TreeNode *targetPhysicalNode = physicalMemory.findAllocID(physicalMemory.root, targetAllocID);
+        //TreeNode *targetPhysicalNode = physicalMemory.findAllocID(physicalMemory.root, targetAllocID);
         if (targetPhysicalNode == nullptr)
         {
             //printf("cmd_memFree: case12\n");
@@ -39,6 +40,7 @@ void cmd_memFree(Job *&currentCpuJob, PhysicalMemoryTree &physicalMemory, int op
         for (temp_iter = physicalMemory.allocID_stack.begin(); temp_iter != physicalMemory.allocID_stack.end(); temp_iter++)
         {
             int temp = *temp_iter;
+            //printf("cmd_memFree: case20\n");
             //printf("cmd_memFree: case201\n");
             if (temp == targetPhysicalNode->allocationID)
             {

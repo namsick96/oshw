@@ -70,7 +70,7 @@ void sampled(Job *&currentCpuJob, PhysicalMemoryTree &physicalMemory, deque<Job 
         if (envictJob->pageTable->allocationIDv[k] == envictNodeAllocID)
         {
             //printf("sampled: case4loop\n");
-            envictJob->pageTable->allocationIDv[k] = -1;
+            //envictJob->pageTable->allocationIDv[k] = -1;
             envictJob->pageTable->validBitv[k] = 0;
             envictJob->pageTable->refereceBitv[k] = 0;
         }
@@ -80,8 +80,11 @@ void sampled(Job *&currentCpuJob, PhysicalMemoryTree &physicalMemory, deque<Job 
 
     //physical memory node도 envict해주기
     TreeNode *targetPhysicalNode = physicalMemory.findAllocID(physicalMemory.root, envictNodeAllocID);
-
-    targetPhysicalNode->allocationID = -1;
-    targetPhysicalNode->pageID = -1;
-    physicalMemory.wrapUp(targetPhysicalNode); //버디 시스템으로 메모리 wrapup
+    //printf("sampled:: case1\n");
+    if (targetPhysicalNode != nullptr)
+    {
+        targetPhysicalNode->allocationID = -1;
+        targetPhysicalNode->pageID = -1;
+        physicalMemory.wrapUp(targetPhysicalNode);
+    } //버디 시스템으로 메모리 wrapup
 }

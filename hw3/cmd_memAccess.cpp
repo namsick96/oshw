@@ -89,19 +89,40 @@ void cmd_memAccess(Job *&currentCpuJob, PhysicalMemoryTree &physicalMemory, int 
         if (targetPhysicalMemBlock != nullptr)
         {
             //physical memory update
-            targetPhysicalMemBlock->allocationID = physicalMemory.physical_final_allocationID;
-            targetPhysicalMemBlock->pageID = opparam;
-            physicalMemory.allocID_stack.push_back(targetPhysicalMemBlock->allocationID);
-            physicalMemory.allocated_list.push_back(make_pair(currentCpuJob, physicalMemory.physical_final_allocationID));
+            if (currentCpuJob->pageTable->allocationIDv[currentCpuJob->pageTableidx] == -1)
+            {
+                targetPhysicalMemBlock->allocationID = physicalMemory.physical_final_allocationID;
+
+                targetPhysicalMemBlock->pageID = opparam;
+                physicalMemory.allocID_stack.push_back(targetPhysicalMemBlock->allocationID);
+                physicalMemory.allocated_list.push_back(make_pair(currentCpuJob, physicalMemory.physical_final_allocationID));
+                physicalMemory.physical_final_allocationID++;
+            }
+            else
+            {
+                targetPhysicalMemBlock->allocationID = currentCpuJob->pageTable->allocationIDv[currentCpuJob->pageTableidx];
+                targetPhysicalMemBlock->pageID = opparam;
+                physicalMemory.allocID_stack.push_back(currentCpuJob->pageTable->allocationIDv[currentCpuJob->pageTableidx]);
+                physicalMemory.allocated_list.push_back(make_pair(currentCpuJob, currentCpuJob->pageTable->allocationIDv[currentCpuJob->pageTableidx]));
+            }
+
             //virtual memory update
             for (int k = currentCpuJob->pageTableidx; k < currentCpuJob->pageTableidx + pageCount; k++)
             {
                 currentCpuJob->pageTable->pageIDv[k] = opparam;
-                currentCpuJob->pageTable->allocationIDv[k] = physicalMemory.physical_final_allocationID;
+                if (currentCpuJob->pageTable->allocationIDv[k] == -1)
+                {
+                    currentCpuJob->pageTable->allocationIDv[k] = physicalMemory.physical_final_allocationID - 1;
+                }
+                //currentCpuJob->pageTable->allocationIDv[k] = physicalMemory.physical_final_allocationID;
                 currentCpuJob->pageTable->refereceBitv[k] = 1;
                 currentCpuJob->pageTable->validBitv[k] = 1;
             }
-            physicalMemory.physical_final_allocationID++;
+            /*
+            if (currentCpuJob->pageTable->allocationIDv[currentCpuJob->pageTableidx] == -1)
+            {
+                physicalMemory.physical_final_allocationID++;
+            }*/
         }
     }
 }

@@ -34,7 +34,7 @@ void second_chance(Job *&currentCpuJob, PhysicalMemoryTree &physicalMemory, dequ
             {
                 //physical memory allocation disable!
                 envictOccur = true;
-                tempJob->pageTable->allocationIDv[i] = -1;
+                //tempJob->pageTable->allocationIDv[i] = -1;
                 tempJob->pageTable->validBitv[i] = 0;
                 envictNodePageID = tempJob->pageTable->pageIDv[i];
                 //envict대상
@@ -64,7 +64,7 @@ void second_chance(Job *&currentCpuJob, PhysicalMemoryTree &physicalMemory, dequ
                 {
                     //physical memory allocation disable!
                     envictOccur = true;
-                    tempJob->pageTable->allocationIDv[i] = -1;
+                    //tempJob->pageTable->allocationIDv[i] = -1;
                     tempJob->pageTable->validBitv[i] = 0;
                     envictNodePageID = tempJob->pageTable->pageIDv[i];
                     //envict대상
