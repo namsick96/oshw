@@ -31,7 +31,7 @@ void printSchedLog(FILE *out, Job *&currentCpuJob, deque<Job *> *run_queue, list
 
     // line 1
     fprintf(out, "[%d Cycle] Scheduled Process: ", cycle);
-    if (currentCpuJob->runningTime == -1)
+    if (currentCpuJob->runningTime == 0)
     {
         fprintf(out, "%d %s (priority %d)\n", pid, name, priority);
     }
@@ -64,7 +64,7 @@ void printSchedLog(FILE *out, Job *&currentCpuJob, deque<Job *> *run_queue, list
         {
             for (int i = 0; i < run_queue[k].size(); i++)
             {
-                fprintf(out, "%d(%s)", run_queue[k][i]->pid, run_queue[k][i]->file_name.c_str());
+                fprintf(out, "%d(%s) ", run_queue[k][i]->pid, run_queue[k][i]->file_name.c_str());
             }
             fprintf(out, "\n");
         }
@@ -81,7 +81,7 @@ void printSchedLog(FILE *out, Job *&currentCpuJob, deque<Job *> *run_queue, list
         for (job_iter = sleepList.begin(); job_iter != sleepList.end(); job_iter++)
         {
             Job *job = *job_iter;
-            fprintf(out, "%d(%s)", job->pid, job->file_name.c_str());
+            fprintf(out, "%d(%s) ", job->pid, job->file_name.c_str());
         }
         fprintf(out, "\n");
     }
@@ -97,7 +97,7 @@ void printSchedLog(FILE *out, Job *&currentCpuJob, deque<Job *> *run_queue, list
         for (job_iter = ioWaitList.begin(); job_iter != ioWaitList.end(); job_iter++)
         {
             Job *job = *job_iter;
-            fprintf(out, "%d(%s)", job->pid, job->file_name.c_str());
+            fprintf(out, "%d(%s) ", job->pid, job->file_name.c_str());
         }
         fprintf(out, "\n");
     }

@@ -14,6 +14,7 @@ void check_sleep(deque<Job *> *run_queue, list<Job *> &sleepList)
             temp.push_back(job);
             int jobPriority = job->priority;
             job->timeQuantum = 10;
+            job->runningTime = 0;
             run_queue[jobPriority].push_back(job); // go back to runqueue
         }
     }

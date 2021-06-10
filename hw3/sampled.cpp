@@ -9,6 +9,7 @@ void sampled(Job *&currentCpuJob, PhysicalMemoryTree &physicalMemory, deque<Job 
 {
 
     //allocid 작은 순서대로 정렬하기
+    //printf("sampled: case1\n");
     list<pair<Job *, int> >::iterator job_iter;
     vector<pair<Job *, int> > sorted_allocid;
     for (job_iter = physicalMemory.allocated_list.begin(); job_iter != physicalMemory.allocated_list.end(); job_iter++)
@@ -17,7 +18,7 @@ void sampled(Job *&currentCpuJob, PhysicalMemoryTree &physicalMemory, deque<Job 
         sorted_allocid.push_back(temp);
     }
     sort(sorted_allocid.begin(), sorted_allocid.end(), cmpAllocID2);
-
+    //printf("sampled: case2\n");
     Job *envictJob;
     int envictNodeAllocID;
     int envictNodePageID;
@@ -28,16 +29,22 @@ void sampled(Job *&currentCpuJob, PhysicalMemoryTree &physicalMemory, deque<Job 
     {
         Job *targetJob = sorted_allocid[k].first;
         int targetAllocID = sorted_allocid[k].second;
+        /*
+        if (targetJob == nullptr)
+        {
+            printf("targetAllocID: %d\n", targetAllocID);
+        }
+        */
         for (int i = 0; i < targetJob->pageTablePageNum; i++)
         {
-            if (targetJob->pageTable->allocationIDv[k] == targetAllocID)
+            if (targetJob->pageTable->allocationIDv[i] == targetAllocID)
             {
                 referencebyte_vector.push_back(targetJob->pageTable->refereceBytev[i]);
                 break;
             }
         }
     }
-
+    //printf("sampled: case3\n");
     //compare in refernecbyte vector which on is smallest;
     int envict_index;
     unsigned char tempUC = 255;
@@ -49,22 +56,25 @@ void sampled(Job *&currentCpuJob, PhysicalMemoryTree &physicalMemory, deque<Job 
             tempUC = referencebyte_vector[k];
         }
     }
-
+    //printf("sampled: case4\n");
     //envict Job is in sorted_allocid envict_index th node
     envictJob = sorted_allocid[envict_index].first;
+    //printf("sampled: case4a\n");
     envictNodeAllocID = sorted_allocid[envict_index].second;
+    //printf("sampled: case4b\n");
 
     //virtual memory unallocate
     for (int k = 0; k < envictJob->pageTablePageNum; k++)
     {
+        //printf("sampled: case41\n");
         if (envictJob->pageTable->allocationIDv[k] == envictNodeAllocID)
         {
+            //printf("sampled: case4loop\n");
             envictJob->pageTable->allocationIDv[k] = -1;
             envictJob->pageTable->validBitv[k] = 0;
             envictJob->pageTable->refereceBitv[k] = 0;
         }
     }
-
     //physical memory unallocate
     physicalMemory.allocated_list.remove(make_pair(envictJob, envictNodeAllocID));
 

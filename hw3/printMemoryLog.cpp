@@ -153,12 +153,15 @@ void printMemoryLog(FILE *out, Job *&currentCpuJob, deque<Job *> *run_queue, lis
     }
     sort(jobsSortedlist.begin(), jobsSortedlist.end(), cmpPid);
 
+    deque<int> finishedPID;
+    finishedPID.push_front(-2);
     for (int k = 0; k < jobsSortedlist.size(); k++)
     {
-        if (jobsSortedlist[k].second == -1)
+        if (jobsSortedlist[k].second == -1 or jobsSortedlist[k].second == finishedPID.front())
         {
             continue;
         }
+        finishedPID.push_front(jobsSortedlist[k].second);
         Job *jobCase = jobsSortedlist[k].first;
         //subline1;
         fprintf(out, ">> pid(%d) %-20s", jobCase->pid, "Page Table(PID) : ");

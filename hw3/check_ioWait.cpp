@@ -25,6 +25,7 @@ void check_ioWait(deque<Job *> *run_queue, list<Job *> &ioWaitList, vector<Input
                     {
                         tempJob.push_back(job); // append for delete check
                         job->timeQuantum = 10;
+                        job->runningTime = 0;
                         run_queue[job->priority].push_back(job); // append for run, input done
                     }
                     else
