@@ -42,7 +42,7 @@ TreeNode *PhysicalMemoryTree::findAllocID(TreeNode *&current, int alloc_id)
     {
         return current;
     }
-    else if (current->pageID == alloc_id)
+    else if (current->allocationID == alloc_id)
     {
         return current;
     }

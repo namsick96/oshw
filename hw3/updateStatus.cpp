@@ -92,7 +92,7 @@ void updateStatus(Job *&currentCpuJob, deque<Job *> *run_queue, list<Job *> &run
             //page id가 -1이 아닌 page table의 인덱스를 확인한 후 해당 reference bit를 reference byte의 msb로 만들어 줍니다.
         }
     }
-
+    //printf("updateStatus: case1\n");
     if (currentCpuJob->pid != -1)
     {
         // for all Job add runningTime
@@ -117,6 +117,7 @@ void updateStatus(Job *&currentCpuJob, deque<Job *> *run_queue, list<Job *> &run
                 }
             }
         }
+        //printf("updateStatus: case2\n");
         //if currentCpuJob is done.
         if (currentCpuJob->cmdComplete)
         {
@@ -126,19 +127,20 @@ void updateStatus(Job *&currentCpuJob, deque<Job *> *run_queue, list<Job *> &run
             for (int k = 0; k < currentCpuJob->pageTablePageNum; k++)
             {
                 int freePageID = currentCpuJob->pageTable->pageIDv[k];
+                //printf("updateStatus :freePageID: %d\n", freePageID);
 
                 if (freePageID != -1 && currentCpuJob->pageTable->validBitv[k] == 1)
                 {
+                    //printf("go cmd_memFree\n");
                     cmd_memFree(currentCpuJob, physicalMemory, currentCpuJob->pageTable->pageIDv[k]);
+                    //printf("go cmd_memFreeDone\n");
                 }
             }
 
             endProcess.push_back(currentCpuJob);
             currentCpuJob = nullJob;
-
-            //메모리 해제 구현하기
         }
-
+        //printf("updateStatus: case3\n");
         //if currentCpujob goes to sleeping
         if (currentCpuJob->sleepState)
         {

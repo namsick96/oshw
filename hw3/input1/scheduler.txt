@@ -74,7 +74,7 @@ SleepList: Empty
 IOWait List: Empty
 
 [5 Cycle] Scheduled Process: None
-Running Process: Process#0(6) running code program0 line 5(op 3, arg 0)
+Running Process: Process#0(6) running code program0 line 5(op 0, arg 20)
 RunQueue: 0: Empty
 RunQueue: 1: Empty
 RunQueue: 2: Empty
@@ -89,7 +89,7 @@ SleepList: Empty
 IOWait List: Empty
 
 [6 Cycle] Scheduled Process: None
-Running Process: Process#0(6) running code program0 line 6(op 3, arg 0)
+Running Process: Process#0(6) running code program0 line 6(op 1, arg 0)
 RunQueue: 0: Empty
 RunQueue: 1: Empty
 RunQueue: 2: Empty

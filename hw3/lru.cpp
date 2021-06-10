@@ -5,9 +5,12 @@
 
 void lru(Job *&currentCpuJob, PhysicalMemoryTree &physicalMemory)
 {
+    printf("lru case0\n");
     //envict target
     int envictallocID = physicalMemory.allocID_stack.front();
     physicalMemory.allocID_stack.pop_front();
+
+    printf("lru case1\n");
 
     list<pair<Job *, int> >::iterator allocList_iter;
     for (allocList_iter = physicalMemory.allocated_list.begin(); allocList_iter != physicalMemory.allocated_list.end(); allocList_iter++)
@@ -19,6 +22,7 @@ void lru(Job *&currentCpuJob, PhysicalMemoryTree &physicalMemory)
         }
     }
     Job *envictJob = allocList_iter->first;
+    printf("lru case2\n");
 
     //virtual memory envict
 
@@ -30,7 +34,7 @@ void lru(Job *&currentCpuJob, PhysicalMemoryTree &physicalMemory)
             envictJob->pageTable->validBitv[k] = 0;
         }
     }
-
+    printf("lru case3\n");
     //physical memory envict
     TreeNode *envictNode = physicalMemory.findAllocID(physicalMemory.root, envictallocID);
 
@@ -38,6 +42,7 @@ void lru(Job *&currentCpuJob, PhysicalMemoryTree &physicalMemory)
     physicalMemory.allocID_stack.remove(envictNode->allocationID);
     physicalMemory.allocated_list.remove(make_pair(envictJob, envictNode->allocationID));
 
+    printf("lru case4\n");
     //initialize
     envictNode->allocationID = -1;
     envictNode->pageID = -1;

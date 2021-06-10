@@ -128,7 +128,7 @@ int main(int argc, char *argv[])
     string memory_output = dir + "/memory.txt";
     FILE *fp_memory = fopen(memory_output.c_str(), "w");
 
-    cout << "Hi Hello" << endl;
+    //cout << "Hi Hello" << endl;
 
     while (endProcess.size() != inProcessing)
     {
@@ -161,11 +161,11 @@ int main(int argc, char *argv[])
         // step 6
         printSchedLog(fp_sched, currentCpuJob, run_queue, sleepList, ioWaitList, currentCycle);
         printMemoryLog(fp_memory, currentCpuJob, run_queue, sleepList, ioWaitList, physicalMemory, page, currentCycle, page_fault);
-        //cout << "printSchedDone"
-        //     << "\n";
+        cout << "printSched and Memory Done"
+             << "\n";
         // step 7
         updateStatus(currentCpuJob, run_queue, runningJobs_list, sleepList, ioWaitList, endProcess, currentCycle, timeInterval, nullJob, physicalMemory, page); // physicalMemory만 더 추가하기;
-        cout << currentCycle << "\n";
+        cout << "currentCycle: " << currentCycle << "\n";
         cout << "endProcessNum is" << endProcess.size() << endl;
         cout << "InProcessing: " << inProcessing << endl;
         // check number of running process

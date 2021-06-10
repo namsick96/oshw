@@ -8,7 +8,7 @@ void Job::setData(int vmemSize, int pageSize)
     pageTablePageNum = vmemSize / pageSize;
     pageTableFinalPageID = 0;
     pageTable = new VirtualMemoryPageTable(pageTablePageNum, pageTablePagesize);
-    printf("setDone1\n");
+
     for (int k = 0; k < pageTablePageNum; k++)
     {
         pageTable->pageIDv.push_back(-1);
