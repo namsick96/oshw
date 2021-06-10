@@ -153,7 +153,7 @@ int main(int argc, char *argv[])
         //status_update(currentCpuJob, run_queue, currentCycle); this code goes to updateStatus
         //cout << "scheduling done"<< "\n";
         // step 5
-        commandExecute(currentCpuJob, sleepList, ioWaitList, runningJobs_list, currentCycle, physicalMemory, page, page_fault);
+        commandExecute(currentCpuJob, run_queue, sleepList, ioWaitList, runningJobs_list, currentCycle, physicalMemory, page, page_fault);
         //cout << "executeDone"
         //    << "\n";
         //sleep(1);

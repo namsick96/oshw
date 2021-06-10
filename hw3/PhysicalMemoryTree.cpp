@@ -36,20 +36,20 @@ TreeNode *PhysicalMemoryTree::findRight(TreeNode *&current)
     return current->right;
 }*/
 
-TreeNode *PhysicalMemoryTree::findPage(TreeNode *&current, int page_id)
+TreeNode *PhysicalMemoryTree::findAllocID(TreeNode *&current, int alloc_id)
 {
     if (current == nullptr)
     {
         return current;
     }
-    else if (current->pageID == page_id)
+    else if (current->pageID == alloc_id)
     {
         return current;
     }
     else
     {
-        TreeNode *leftRecur = findPage(current->left, page_id);
-        TreeNode *rightRecur = findPage(current->right, page_id);
+        TreeNode *leftRecur = findAllocID(current->left, alloc_id);
+        TreeNode *rightRecur = findAllocID(current->right, alloc_id);
         if (leftRecur != nullptr)
         {
             return leftRecur;

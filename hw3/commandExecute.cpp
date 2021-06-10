@@ -1,6 +1,6 @@
 #include "commandExecute.h"
 
-void commandExecute(Job *&currentCpuJob, list<Job *> &sleepList, list<Job *> &ioWaitList, list<Job *> &runningJobs_list, int currentCycle, PhysicalMemoryTree &physicalMemory, string page, int &page_fault) //, list<PageBundle *> *all_pages, PageBundle **physicalMem, string sched_opt, string page_opt, int &aid, int physicalNum, int currentCycle, int &page_fault);
+void commandExecute(Job *&currentCpuJob, deque<Job *> *run_queue, list<Job *> &sleepList, list<Job *> &ioWaitList, list<Job *> &runningJobs_list, int currentCycle, PhysicalMemoryTree &physicalMemory, string page, int &page_fault) //, list<PageBundle *> *all_pages, PageBundle **physicalMem, string sched_opt, string page_opt, int &aid, int physicalNum, int currentCycle, int &page_fault);
 {
     cout << "start" << endl;
     if (currentCpuJob->pid != -1)
@@ -26,7 +26,7 @@ void commandExecute(Job *&currentCpuJob, list<Job *> &sleepList, list<Job *> &io
         else if (op == 1)
         {
             //memory access
-            cmd_memAccess(currentCpuJob, physicalMemory, opparam, currentCycle, page, page_fault);
+            cmd_memAccess(currentCpuJob, physicalMemory, opparam, currentCycle, page, page_fault, run_queue, sleepList, ioWaitList);
         }
         else if (op == 2)
         {

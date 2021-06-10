@@ -20,8 +20,10 @@ void cmd_memFree(Job *&currentCpuJob, PhysicalMemoryTree &physicalMemory, int op
     }
     currentCpuJob->recentUsedPageNum = pageCount;
     //physical memory먼저 unload시키기
-    int targetPageID = currentCpuJob->pageTable->pageIDv[currentCpuJob->pageTableidx];
-    TreeNode *targetPhysicalNode = physicalMemory.findPage(physicalMemory.root, targetPageID);
+    int targetAllocID = currentCpuJob->pageTable->allocationIDv[currentCpuJob->pageTableidx];
+    TreeNode *targetPhysicalNode = physicalMemory.findAllocID(physicalMemory.root, targetAllocID);
+    physicalMemory.allocID_stack.remove(targetPhysicalNode->allocationID);
+    physicalMemory.allocated_list.remove(make_pair(currentCpuJob, targetPhysicalNode->allocationID));
     //wrapup method
     targetPhysicalNode->allocationID = -1;
     targetPhysicalNode->pageID = -1;

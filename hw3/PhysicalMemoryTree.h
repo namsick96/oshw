@@ -1,6 +1,7 @@
 #include <list>
 #include <math.h>
 #include <stack>
+#include "Job.h"
 #ifndef __PHYSICALMEMORYTREE__
 #define __PHYSICALMEMORYTREE__
 
@@ -43,7 +44,8 @@ public:
     int physical_final_allocationID;
     TreeNode *root;
     int wholeFramenum;
-    list<int> pageID_stack;
+    list<int> allocID_stack;
+    list<pair<Job *, int> > allocated_list;
     PhysicalMemoryTree(int framenum)
     {
         wholeFramenum = framenum;
@@ -54,7 +56,7 @@ public:
     //void sumup_child(TreeNode *&current);
     void wrapUp(TreeNode *&current);
     pair<TreeNode *, TreeNode *> childPairReturn(TreeNode *&current);
-    TreeNode *findPage(TreeNode *&current, int page_id);
+    TreeNode *findAllocID(TreeNode *&current, int alloc_id);
     TreeNode *findProperNode(TreeNode *&current, int frame_num);
 };
 /*

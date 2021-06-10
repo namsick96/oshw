@@ -2,6 +2,8 @@
 #include <deque>
 #include <vector>
 #include "Job.h"
+#include <string>
+#include <cstring>
 #include "cmd_memFree.h"
 #include "PhysicalMemoryTree.h"
 
