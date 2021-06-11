@@ -49,7 +49,7 @@ void cmd_memAccess(Job *&currentCpuJob, PhysicalMemoryTree &physicalMemory, int 
         //printf("root allocid: %d, frameNum: %d, pageCount: %d", physicalMemory.root->allocationID, physicalMemory.root->frameNum, pageCount);
 
         TreeNode *targetPhysicalMemBlock = physicalMemory.findProperNode(physicalMemory.root, pageCount);
-        //printf("cmd_memAccess pageCount: %d", pageCount);
+        printf("cmd_memAccess pageCount: %d\n", pageCount);
         /*
         cout << targetPhysicalMemBlock->allocationID << endl
              << targetPhysicalMemBlock->frameNum << endl

@@ -76,25 +76,16 @@ TreeNode *PhysicalMemoryTree::findProperNode(TreeNode *&current, int frame_num)
     if (current->allocationID == -1 && current->frameNum / 2 >= frame_num && current->splited)
     {
         TreeNode *leftRecur = findProperNode(current->left, frame_num);
-        TreeNode *rightRecur = findProperNode(current->right, frame_num);
-        if (leftRecur->allocationID == -1)
+        if (leftRecur != nullptr)
         {
-            return findProperNode(leftRecur, frame_num);
-            //return leftRecur;
+            return leftRecur;
         }
-        else if (rightRecur->allocationID == -1)
-        {
-            return findProperNode(rightRecur, frame_num);
-            //return rightRecur;
-        }
-    }
-
-    //노드를 쪼개야할때
-    if (current->allocationID == -1 && current->frameNum / 2 >= frame_num && !current->splited)
-    {
-        current->make_child();
-        TreeNode *leftRecur = findProperNode(current->left, frame_num);
         TreeNode *rightRecur = findProperNode(current->right, frame_num);
+        if (rightRecur != nullptr)
+        {
+            return rightRecur;
+        }
+        /*
         if (leftRecur != nullptr)
         {
             return leftRecur;
@@ -102,7 +93,34 @@ TreeNode *PhysicalMemoryTree::findProperNode(TreeNode *&current, int frame_num)
         else
         {
             return rightRecur;
+        }*/
+    }
+
+    //노드를 쪼개야할때
+    if (current->allocationID == -1 && current->frameNum / 2 >= frame_num && !current->splited)
+    {
+        current->make_child();
+        TreeNode *leftRecur = findProperNode(current->left, frame_num);
+        if (leftRecur != nullptr)
+        {
+            //current->right = nullptr;
+            return leftRecur;
         }
+        TreeNode *rightRecur = findProperNode(current->right, frame_num);
+        if (rightRecur != nullptr)
+        {
+            return rightRecur;
+        }
+        /*if (leftRecur != nullptr)
+        {
+            //current->right = nullptr;
+            return leftRecur;
+        }
+        else
+        {
+            //current->left = nullptr;
+            return rightRecur;
+        }*/
     }
     if (current->allocationID == -1 && current->frameNum >= frame_num && current->frameNum / 2 < frame_num && !current->splited)
     {
@@ -111,38 +129,8 @@ TreeNode *PhysicalMemoryTree::findProperNode(TreeNode *&current, int frame_num)
     }
 
     return nullptr;
-
-    /*
-    //마지막 level에 도달했을 경우
-    if (current == nullptr)
-    {
-        return current;
-    }
-
-    if (current->allocationID != -1)
-    {
-        return nullptr;
-    }
-    if (current->allocationID == -1 && current->frameNum >= frame_num && current->frameNum / 2 < frame_num && !current->splited)
-    {
-        //node 쪼개는거 구현하기.
-        return current;
-    }
-    else
-    {
-        TreeNode *leftRecur = findProperNode(current->left, frame_num);
-        TreeNode *rightRecur = findProperNode(current->left, frame_num);
-        if (leftRecur != nullptr)
-        {
-            return leftRecur;
-        }
-        else
-        {
-            return rightRecur;
-        }
-    }
-    */
 }
+
 void PhysicalMemoryTree::wrapUp(TreeNode *&current)
 {
     if (current->parent == nullptr)
