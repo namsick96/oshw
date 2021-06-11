@@ -168,6 +168,7 @@ int main(int argc, char *argv[])
         cout << "currentCycle: " << currentCycle << "\n";
         cout << "endProcessNum is" << endProcess.size() << endl;
         cout << "InProcessing: " << inProcessing << endl;
+        cout << endl;
         // check number of running process
         //runque 개수
         /*

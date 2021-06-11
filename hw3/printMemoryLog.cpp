@@ -48,14 +48,14 @@ void printMemoryLog(FILE *out, Job *&currentCpuJob, deque<Job *> *run_queue, lis
     //line 1
     if (currentCpuJob->pid == -1)
     {
-        fprintf(out, "[%d Cycle] Input : Function [NO-OP]\n", currentCycle);
+        fprintf(out, "[%d Cycle] Input: Function[NO-OP]\n", currentCycle);
     }
     else
     {
         if (op == 0)
         {
             int allocID = physicalMemory.physical_final_allocationID - 1;
-            fprintf(out, "[%d Cycle] Input : Pid [%d] Function [ALLOCATION] Page ID [%d] Page Num[%d]\n", currentCycle, pid, pageID, arg);
+            fprintf(out, "[%d Cycle] Input: Pid[%d] Function[ALLOCATION] Page ID[%d] Page Num[%d]\n", currentCycle, pid, pageID, arg);
         }
         else if (op == 1)
         {
@@ -68,33 +68,33 @@ void printMemoryLog(FILE *out, Job *&currentCpuJob, deque<Job *> *run_queue, lis
                     pageCount++;
                 }
             }
-            fprintf(out, "[%d Cycle] Input : Pid [%d] Function [ACCESS] Page ID [%d] Page Num[%d]\n", currentCycle, pid, arg, pageCount);
+            fprintf(out, "[%d Cycle] Input: Pid[%d] Function[ACCESS] Page ID[%d] Page Num[%d]\n", currentCycle, pid, arg, pageCount);
         }
         else if (op == 2)
         {
             // memory release
             int pageCount = currentCpuJob->recentUsedPageNum;
-            fprintf(out, "[%d Cycle] Input : Pid [%d] Function [RELEASE] Page ID [%d] Page Num[%d]\n", currentCycle, pid, arg, pageCount);
+            fprintf(out, "[%d Cycle] Input: Pid[%d] Function[RELEASE] Page ID[%d] Page Num[%d]\n", currentCycle, pid, arg, pageCount);
         }
         else if (op == 3)
         {
-            fprintf(out, "[%d Cycle] Input : Pid [%d] Function [NONMEMORY]\n", currentCycle, pid);
+            fprintf(out, "[%d Cycle] Input: Pid[%d] Function[NONMEMORY]\n", currentCycle, pid);
         }
         else if (op == 4)
         {
             // Sleep
-            fprintf(out, "[%d Cycle] Input : Pid [%d] Function [SLEEP]\n", currentCycle, pid);
+            fprintf(out, "[%d Cycle] Input: Pid[%d] Function[SLEEP]\n", currentCycle, pid);
         }
         else if (op == 5)
         {
             // IO Wait
-            fprintf(out, "[%d Cycle] Input : Pid [%d] Function [IOWAIT]\n", currentCycle, pid);
+            fprintf(out, "[%d Cycle] Input: Pid[%d] Function[IOWAIT]\n", currentCycle, pid);
         }
     }
     // line 2
     //여기서부터 하기
     //while문으로 dfs, splited==false인 것만 vector에 넣기. 이 벡터는 프린트 순서임.
-    fprintf(out, "%-30s", ">> Physical Memory : ");
+    fprintf(out, "%-29s", ">> Physical Memory: ");
     int counter = 0;
     vector<pair<int, int> > v;
     vector<int> showlist;
@@ -164,7 +164,7 @@ void printMemoryLog(FILE *out, Job *&currentCpuJob, deque<Job *> *run_queue, lis
         finishedPID.push_front(jobsSortedlist[k].second);
         Job *jobCase = jobsSortedlist[k].first;
         //subline1;
-        fprintf(out, ">> pid(%d) %-20s", jobCase->pid, "Page Table(PID) : ");
+        fprintf(out, ">> pid(%d)%-20s", jobCase->pid, "Page Table(PID): ");
         for (int i = 0; i < jobCase->pageTablePageNum; i++)
         {
             if (i % 4 == 0)
@@ -183,7 +183,7 @@ void printMemoryLog(FILE *out, Job *&currentCpuJob, deque<Job *> *run_queue, lis
         fprintf(out, "|\n");
 
         //subline2;
-        fprintf(out, ">> pid(%d) %-20s", jobCase->pid, "Page Table(AID) : ");
+        fprintf(out, ">> pid(%d)%-20s", jobCase->pid, "Page Table(AID): ");
         for (int i = 0; i < jobCase->pageTablePageNum; i++)
         {
             if (i % 4 == 0)
@@ -202,7 +202,7 @@ void printMemoryLog(FILE *out, Job *&currentCpuJob, deque<Job *> *run_queue, lis
         fprintf(out, "|\n");
 
         //subline3;
-        fprintf(out, ">> pid(%d) %-20s", jobCase->pid, "Page Table(Valid) : ");
+        fprintf(out, ">> pid(%d)%-20s", jobCase->pid, "Page Table(Valid): ");
 
         for (int i = 0; i < jobCase->pageTablePageNum; i++)
         {
@@ -222,7 +222,7 @@ void printMemoryLog(FILE *out, Job *&currentCpuJob, deque<Job *> *run_queue, lis
         fprintf(out, "|\n");
 
         //subline4
-        fprintf(out, ">> pid(%d) %-20s", jobCase->pid, "Page Table(Ref) : ");
+        fprintf(out, ">> pid(%d)%-20s", jobCase->pid, "Page Table(Ref): ");
         for (int i = 0; i < jobCase->pageTablePageNum; i++)
         {
             if (i % 4 == 0)

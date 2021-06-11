@@ -97,6 +97,7 @@ void updateStatus(Job *&currentCpuJob, deque<Job *> *run_queue, list<Job *> &run
     {
         // for all Job add runningTime
         currentCpuJob->runningTime++;
+        currentCpuJob->timeQuantum--;
 
         // check response time by real start time -starting time
         if (currentCpuJob->responseTime == -1)
@@ -113,7 +114,6 @@ void updateStatus(Job *&currentCpuJob, deque<Job *> *run_queue, list<Job *> &run
                 for (int i = 0; i < run_queue[k].size(); i++)
                 {
                     run_queue[k][i]->waitingTime++;
-                    run_queue[k][i]->timeQuantum--;
                 }
             }
         }

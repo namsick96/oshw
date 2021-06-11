@@ -55,10 +55,10 @@ void printSchedLog(FILE *out, Job *&currentCpuJob, deque<Job *> *run_queue, list
     // line 3 runque
     for (int k = 0; k < 10; k++)
     {
-        fprintf(out, "RunQueue: %d: ", k);
+        fprintf(out, "RunQueue %d: ", k);
         if (run_queue[k].empty())
         {
-            fprintf(out, "Empty\n");
+            fprintf(out, "Empty");
         }
         else
         {
@@ -66,15 +66,15 @@ void printSchedLog(FILE *out, Job *&currentCpuJob, deque<Job *> *run_queue, list
             {
                 fprintf(out, "%d(%s) ", run_queue[k][i]->pid, run_queue[k][i]->file_name.c_str());
             }
-            fprintf(out, "\n");
         }
+        fprintf(out, "\n");
     }
 
     // line 4
     fprintf(out, "SleepList: ");
     if (sleepList.empty())
     {
-        fprintf(out, "Empty\n");
+        fprintf(out, "Empty");
     }
     else
     {
@@ -83,14 +83,14 @@ void printSchedLog(FILE *out, Job *&currentCpuJob, deque<Job *> *run_queue, list
             Job *job = *job_iter;
             fprintf(out, "%d(%s) ", job->pid, job->file_name.c_str());
         }
-        fprintf(out, "\n");
     }
+    fprintf(out, "\n");
 
     // line 5
     fprintf(out, "IOWait List: ");
     if (ioWaitList.empty())
     {
-        fprintf(out, "Empty\n");
+        fprintf(out, "Empty");
     }
     else
     {
@@ -99,8 +99,8 @@ void printSchedLog(FILE *out, Job *&currentCpuJob, deque<Job *> *run_queue, list
             Job *job = *job_iter;
             fprintf(out, "%d(%s) ", job->pid, job->file_name.c_str());
         }
-        fprintf(out, "\n");
     }
+    fprintf(out, "\n");
 
     fprintf(out, "\n");
 }
