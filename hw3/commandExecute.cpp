@@ -13,8 +13,8 @@ void commandExecute(Job *&currentCpuJob, deque<Job *> *run_queue, list<Job *> &s
         int op = currentCpuJob->cmd_list[currentCpuJob->current_cmd_int].first;       //cmdVec[cmdVecidx].first;
         int opparam = currentCpuJob->cmd_list[currentCpuJob->current_cmd_int].second; //cmdVec[cmdVecidx].second;
 
-        cout << "op and opram" << endl;
-        cout << op << " " << opparam << endl;
+        //cout << "op and opram" << endl;
+        //cout << op << " " << opparam << endl;
         //execute
 
         if (op == 0)

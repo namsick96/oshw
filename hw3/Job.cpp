@@ -42,14 +42,3 @@ void Job::setData(int vmemSize, int pageSize)
     current_cmd_int = 0;
     //printf("Set end\n");
 }
-
-void Job::printCmd()
-{
-    printf("%d  %d  %s\n", pid, cmd_num, file_name.c_str());
-    vector<pair<int, int> >::iterator iter = cmd_list.begin();
-    for (; iter != cmd_list.end(); iter++)
-    {
-        pair<int, int> cmd = *iter;
-        printf("cmd : %d   | opt : %d\n", cmd.first, cmd.second);
-    }
-}

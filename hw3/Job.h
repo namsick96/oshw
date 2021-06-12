@@ -149,8 +149,6 @@ public:
     }
 
     void setData(int vmemSize, int pageSize);
-
-    void printCmd();
 };
 
 #endif //__JOB_H__

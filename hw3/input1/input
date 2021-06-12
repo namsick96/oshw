@@ -1,11 +1,6 @@
-10	2048	1024	32
-1	program0	3
-3	program1	4
-13	program2	1
-20	program3	7
-31	program4	9
-40	program5	2
-46	program6	7
-53	program7	5
-56	program8	0
-59	program9	1
+5 2048 1024 32
+0 program1 6
+5 program2 3
+8 INPUT 0
+9 program3 6
+15 INPUT 1

@@ -16,7 +16,7 @@ Job *scheduler::scheduling(Job *currentCpuJob)
             break;
         }
     }
-    cout << "scheduling:readyQueue에 있는 process Priority is " << readyQueueTopPriority << endl; //for checking
+    //cout << "scheduling:readyQueue에 있는 process Priority is " << readyQueueTopPriority << endl; //for checking
     //No Scheduling item
     //Null task go
     //in this case nullJob preceed

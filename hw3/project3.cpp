@@ -50,12 +50,12 @@ int main(int argc, char *argv[])
         if (strcmp(option.c_str(), "-page") == 0)
         {
             page = option_detail;
-            cout << page << "\n";
+            //cout << page << "\n";
         }
         else if (strcmp(option.c_str(), "-dir") == 0)
         {
             dir = option_detail;
-            cout << dir << "\n";
+            //cout << dir << "\n";
         }
     }
 
@@ -161,14 +161,14 @@ int main(int argc, char *argv[])
         // step 6
         printSchedLog(fp_sched, currentCpuJob, run_queue, sleepList, ioWaitList, currentCycle);
         printMemoryLog(fp_memory, currentCpuJob, run_queue, sleepList, ioWaitList, physicalMemory, page, currentCycle, page_fault);
-        cout << "printSched and Memory Done"
-             << "\n";
+        // cout << "printSched and Memory Done"
+        //      << "\n";
         // step 7
         updateStatus(currentCpuJob, run_queue, runningJobs_list, sleepList, ioWaitList, endProcess, currentCycle, timeInterval, nullJob, physicalMemory, page); // physicalMemory만 더 추가하기;
-        cout << "currentCycle: " << currentCycle << "\n";
-        cout << "endProcessNum is" << endProcess.size() << endl;
-        cout << "InProcessing: " << inProcessing << endl;
-        cout << endl;
+        // cout << "currentCycle: " << currentCycle << "\n";
+        // cout << "endProcessNum is" << endProcess.size() << endl;
+        // cout << "InProcessing: " << inProcessing << endl;
+        // cout << endl;
         // check number of running process
         //runque 개수
         /*

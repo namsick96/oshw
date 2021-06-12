@@ -1,8 +1,8 @@
 import os
 
 parent_dir = './jhinput'
-f1 = 'scheduler.txt'
-f2 = 'scheduler_jaeun.txt'
+f1 = 'memory.txt'
+f2 = 'memory_lru.txt'
 
 with open(os.path.join(parent_dir, f1)) as f:
     str1 = f.readlines()

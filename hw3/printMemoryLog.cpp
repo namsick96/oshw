@@ -78,7 +78,7 @@ void printMemoryLog(FILE *out, Job *&currentCpuJob, deque<Job *> *run_queue, lis
         }
         else if (op == 3)
         {
-            fprintf(out, "[%d Cycle] Input: Pid[%d] Function[NONMEMORY]\n", currentCycle, pid);
+            fprintf(out, "[%d Cycle] Input: Pid[%d] Function[NON-MEMORY]\n", currentCycle, pid);
         }
         else if (op == 4)
         {

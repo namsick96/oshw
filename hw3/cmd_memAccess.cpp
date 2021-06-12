@@ -49,7 +49,7 @@ void cmd_memAccess(Job *&currentCpuJob, PhysicalMemoryTree &physicalMemory, int 
         //printf("root allocid: %d, frameNum: %d, pageCount: %d", physicalMemory.root->allocationID, physicalMemory.root->frameNum, pageCount);
 
         TreeNode *targetPhysicalMemBlock = physicalMemory.findProperNode(physicalMemory.root, pageCount);
-        printf("cmd_memAccess pageCount: %d\n", pageCount);
+        //printf("cmd_memAccess pageCount: %d\n", pageCount);
         /*
         cout << targetPhysicalMemBlock->allocationID << endl
              << targetPhysicalMemBlock->frameNum << endl
@@ -65,7 +65,7 @@ void cmd_memAccess(Job *&currentCpuJob, PhysicalMemoryTree &physicalMemory, int 
             //targetPhysicalMemBlock = physicalMemory.findProperNode(physicalMemory.root, pageCount);
 
             //page교체 알고리즘 쓰기 빈곳이 없어요
-            printf("replacement algorithm start\n");
+            //printf("replacement algorithm start\n");
             if (strcmp(page.c_str(), "sampled") == 0)
             {
                 //physicalmemory에서 aid 올라가 있는 것들 다 확인한다음 aid값 같은 페이지 방문해서 reference byte확인해야함.
